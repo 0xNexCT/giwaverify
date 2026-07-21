@@ -8,31 +8,37 @@ export default function Header() {
   const [showModal, setShowModal] = useState(false)
 
   return (
-    <header className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm">
-      <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-2xl">🛡️</span>
-          <span className="text-xl font-bold text-white">GiwaVerify</span>
-          <span className="text-xs bg-emerald-900/50 text-emerald-400 px-2 py-0.5 rounded-full border border-emerald-800">
-            GIWA Testnet
-          </span>
+    <header className="border-b border-white/5 bg-white/[0.02]">
+      <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="w-7 h-7 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34d399" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+              <path d="M2 17l10 5 10-5"/>
+              <path d="M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <span className="text-base font-semibold text-white">GiwaVerify</span>
         </div>
         <div>
           {isConnected ? (
             <div className="flex items-center gap-3">
-              <span className="text-sm text-gray-400">
-                {address.slice(0, 6)}...{address.slice(-4)}
-              </span>
-              <button onClick={disconnect} className="text-sm text-gray-500 hover:text-gray-300">
-                Disconnect
+              <div className="flex items-center gap-2 px-3 py-1.5 bg-white/5 rounded-lg">
+                <div className="w-2 h-2 rounded-full bg-emerald-400" />
+                <span className="text-sm text-gray-400 font-mono">
+                  {address.slice(0, 4)}...{address.slice(-3)}
+                </span>
+              </div>
+              <button onClick={disconnect} className="text-sm text-gray-500 hover:text-gray-300 transition-colors">
+                Exit
               </button>
             </div>
           ) : (
             <button
               onClick={() => setShowModal(true)}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all"
+              className="bg-emerald-500 hover:bg-emerald-400 text-black px-4 py-1.5 rounded-lg text-sm font-medium transition-all"
             >
-              Connect Wallet
+              Connect
             </button>
           )}
         </div>

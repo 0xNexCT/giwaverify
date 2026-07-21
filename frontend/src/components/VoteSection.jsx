@@ -4,28 +4,28 @@ import { CONTRACTS } from "../config"
 import GiwaVoteAbi from "../abis/GiwaVote.json"
 
 export default function VoteSection() {
-  const [proposalTitle, setProposalTitle] = useState("")
-  const [proposalDesc, setProposalDesc] = useState("")
+  const [title, setTitle] = useState("")
+  const [desc, setDesc] = useState("")
   const [voteId, setVoteId] = useState("")
-  const { writeContract } = useWriteContract()
+  const { writeContract, isPending } = useWriteContract()
 
-  const { data: proposalCount } = useReadContract({
+  const { data: count } = useReadContract({
     address: CONTRACTS.vote,
     abi: GiwaVoteAbi,
     functionName: "proposalCount",
   })
 
-  async function handleCreate() {
-    if (!proposalTitle || !proposalDesc) return
+  function handleCreate() {
+    if (!title || !desc) return
     writeContract({
       address: CONTRACTS.vote,
       abi: GiwaVoteAbi,
       functionName: "createProposal",
-      args: [proposalTitle, proposalDesc, 1440n],
+      args: [title, desc, 1440n],
     })
   }
 
-  async function handleVote(support) {
+  function handleVote(support) {
     if (!voteId) return
     writeContract({
       address: CONTRACTS.vote,
@@ -36,65 +36,58 @@ export default function VoteSection() {
   }
 
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-      <div className="flex items-center gap-2 mb-4">
-        <span className="text-2xl">🗳️</span>
-        <h2 className="text-lg font-bold">Verified Governance</h2>
+    <div className="bg-white/[0.03] border border-white/5 rounded-xl p-5">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-medium text-gray-300">Governance</h3>
+        <span className="text-xs text-gray-600">{Number(count ?? 0)} proposals</span>
       </div>
-
-      <div className="space-y-4">
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <p className="text-sm text-gray-400 mb-1">Total Proposals</p>
-          <p className="text-2xl font-bold">{Number(proposalCount ?? 0)}</p>
-        </div>
-
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <p className="text-sm text-gray-400 mb-2">Create Proposal</p>
-          <input
-            type="text"
-            value={proposalTitle}
-            onChange={(e) => setProposalTitle(e.target.value)}
-            placeholder="Title"
-            className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm w-full mb-2"
-          />
-          <input
-            type="text"
-            value={proposalDesc}
-            onChange={(e) => setProposalDesc(e.target.value)}
-            placeholder="Description"
-            className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm w-full mb-2"
-          />
+      <p className="text-xs text-gray-600 mb-4">Create and vote on ecosystem proposals.</p>
+      <div className="space-y-2 mb-4">
+        <input
+          type="text"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Title"
+          className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 placeholder-gray-600"
+        />
+        <input
+          type="text"
+          value={desc}
+          onChange={(e) => setDesc(e.target.value)}
+          placeholder="Description"
+          className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 placeholder-gray-600"
+        />
+        <button
+          onClick={handleCreate}
+          disabled={!title || !desc || isPending}
+          className="w-full bg-white/5 hover:bg-white/10 disabled:text-gray-600 text-gray-300 py-2 rounded-lg text-sm font-medium transition-all disabled:cursor-not-allowed"
+        >
+          {isPending ? "..." : "Create Proposal"}
+        </button>
+      </div>
+      <div className="border-t border-white/5 pt-4">
+        <input
+          type="number"
+          value={voteId}
+          onChange={(e) => setVoteId(e.target.value)}
+          placeholder="Proposal ID to vote on"
+          className="w-full bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 placeholder-gray-600 mb-2"
+        />
+        <div className="flex gap-2">
           <button
-            onClick={handleCreate}
-            className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all w-full"
+            onClick={() => handleVote(true)}
+            disabled={!voteId || isPending}
+            className="flex-1 bg-white/5 hover:bg-white/10 disabled:text-gray-600 text-gray-300 py-2 rounded-lg text-sm font-medium transition-all disabled:cursor-not-allowed"
           >
-            Create Proposal
+            Approve
           </button>
-        </div>
-
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <p className="text-sm text-gray-400 mb-2">Vote on Proposal</p>
-          <input
-            type="number"
-            value={voteId}
-            onChange={(e) => setVoteId(e.target.value)}
-            placeholder="Proposal ID"
-            className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm w-full mb-2"
-          />
-          <div className="flex gap-2">
-            <button
-              onClick={() => handleVote(true)}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all flex-1"
-            >
-              Vote Yes
-            </button>
-            <button
-              onClick={() => handleVote(false)}
-              className="bg-red-600 hover:bg-red-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all flex-1"
-            >
-              Vote No
-            </button>
-          </div>
+          <button
+            onClick={() => handleVote(false)}
+            disabled={!voteId || isPending}
+            className="flex-1 bg-white/5 hover:bg-white/10 disabled:text-gray-600 text-gray-300 py-2 rounded-lg text-sm font-medium transition-all disabled:cursor-not-allowed"
+          >
+            Reject
+          </button>
         </div>
       </div>
     </div>

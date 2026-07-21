@@ -1,65 +1,50 @@
 import { useState } from "react"
-import { useWriteContract, useReadContracts } from "wagmi"
+import { useWriteContract, useReadContract } from "wagmi"
 import { CONTRACTS } from "../config"
 import GiwaAirdropAbi from "../abis/GiwaAirdrop.json"
 
 export default function AirdropSection() {
-  const [amount, setAmount] = useState("")
-  const { writeContract } = useWriteContract()
+  const [airdropId, setAirdropId] = useState("")
+  const { writeContract, isPending } = useWriteContract()
 
-  const { data: airdropCount } = useReadContracts({
-    contracts: [
-      {
-        address: CONTRACTS.airdrop,
-        abi: GiwaAirdropAbi,
-        functionName: "airdropCount",
-      },
-    ],
+  const { data: count } = useReadContract({
+    address: CONTRACTS.airdrop,
+    abi: GiwaAirdropAbi,
+    functionName: "airdropCount",
   })
 
-  const count = airdropCount?.[0]?.result ?? 0
-
-  async function handleCreate() {
-    if (!amount) return
+  function handleClaim() {
+    if (!airdropId) return
     writeContract({
       address: CONTRACTS.airdrop,
       abi: GiwaAirdropAbi,
       functionName: "claim",
-      args: [BigInt(amount)],
+      args: [BigInt(airdropId)],
     })
   }
 
   return (
-    <div className="bg-gray-900 rounded-xl border border-gray-800 p-6">
-      <div className="flex items-center gap-2 mb-4">
-        <span className="text-2xl">🪂</span>
-        <h2 className="text-lg font-bold">Verified Airdrop</h2>
+    <div className="bg-white/[0.03] border border-white/5 rounded-xl p-5">
+      <div className="flex items-center justify-between mb-4">
+        <h3 className="text-sm font-medium text-gray-300">Airdrop</h3>
+        <span className="text-xs text-gray-600">{Number(count ?? 0)} active</span>
       </div>
-
-      <div className="space-y-4">
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <p className="text-sm text-gray-400 mb-1">Active Airdrops</p>
-          <p className="text-2xl font-bold">{Number(count)}</p>
-        </div>
-
-        <div className="bg-gray-800/50 rounded-lg p-4">
-          <p className="text-sm text-gray-400 mb-2">Demo: Claim test tokens</p>
-          <div className="flex gap-2">
-            <input
-              type="number"
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              placeholder="Airdrop ID"
-              className="bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm flex-1"
-            />
-            <button
-              onClick={handleCreate}
-              className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all"
-            >
-              Claim
-            </button>
-          </div>
-        </div>
+      <p className="text-xs text-gray-600 mb-4">Claim tokens from verified-only distributions.</p>
+      <div className="flex gap-2">
+        <input
+          type="number"
+          value={airdropId}
+          onChange={(e) => setAirdropId(e.target.value)}
+          placeholder="Airdrop ID"
+          className="flex-1 bg-white/5 border border-white/10 rounded-lg px-3 py-2 text-sm text-gray-300 placeholder-gray-600"
+        />
+        <button
+          onClick={handleClaim}
+          disabled={!airdropId || isPending}
+          className="bg-emerald-500 hover:bg-emerald-400 disabled:bg-white/5 disabled:text-gray-600 text-black px-4 py-2 rounded-lg text-sm font-medium transition-all disabled:cursor-not-allowed"
+        >
+          {isPending ? "..." : "Claim"}
+        </button>
       </div>
     </div>
   )
