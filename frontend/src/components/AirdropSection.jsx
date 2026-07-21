@@ -1,11 +1,14 @@
 import { useState } from "react"
-import { useWriteContract, useReadContract } from "wagmi"
-import { CONTRACTS } from "../config"
+import { useWriteContract, useReadContract, useSwitchChain, useChainId } from "wagmi"
+import { CONTRACTS, GIWA_CHAIN } from "../config"
 import GiwaAirdropAbi from "../abis/GiwaAirdrop.json"
 
 export default function AirdropSection() {
   const [airdropId, setAirdropId] = useState("")
+  const [switchStatus, setSwitchStatus] = useState("idle")
   const { writeContract, isPending } = useWriteContract()
+  const chainId = useChainId()
+  const { switchChainAsync } = useSwitchChain()
 
   const { data: count } = useReadContract({
     address: CONTRACTS.airdrop,
@@ -13,8 +16,21 @@ export default function AirdropSection() {
     functionName: "airdropCount",
   })
 
-  function handleClaim() {
+  async function handleClaim() {
     if (!airdropId) return
+    setSwitchStatus("idle")
+
+    if (chainId !== GIWA_CHAIN.id) {
+      try {
+        setSwitchStatus("switching")
+        await switchChainAsync({ chainId: GIWA_CHAIN.id })
+        setSwitchStatus("idle")
+      } catch {
+        setSwitchStatus("error")
+        return
+      }
+    }
+
     writeContract({
       address: CONTRACTS.airdrop,
       abi: GiwaAirdropAbi,
@@ -57,12 +73,19 @@ export default function AirdropSection() {
           />
           <button
             onClick={handleClaim}
-            disabled={!airdropId || isPending}
+            disabled={!airdropId || isPending || switchStatus === "switching"}
             className="btn-accent-airdrop px-5 py-2.5 rounded-lg text-sm font-semibold"
           >
-            {isPending ? "Claiming..." : "Claim"}
+            {switchStatus === "switching" ? "Switching..." : isPending ? "Claiming..." : "Claim"}
           </button>
         </div>
+
+        {switchStatus === "switching" && (
+          <p className="text-xs mt-2" style={{ color: "var(--accent-airdrop)" }}>Switching to GIWA network...</p>
+        )}
+        {switchStatus === "error" && (
+          <p className="text-xs mt-2" style={{ color: "var(--text-amber)" }}>Switch rejected. Please switch to GIWA manually.</p>
+        )}
       </div>
     </div>
   )

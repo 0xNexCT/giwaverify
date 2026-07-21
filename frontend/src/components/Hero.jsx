@@ -6,7 +6,7 @@ export default function Hero() {
         <span className="block text-emerald-400 mt-2">on GIWA Chain</span>
       </h1>
       <p className="text-gray-400 text-lg max-w-2xl mx-auto mb-8">
-        Trusted access powered by Dojang — only verified wallets can claim airdrops,
+        Trusted access powered by Dojang. Only verified wallets can claim airdrops,
         trade P2P, and participate in governance.
       </p>
       <div className="flex flex-wrap justify-center gap-3 text-sm text-gray-500">

@@ -33,9 +33,9 @@ function HeroSection({ onConnect }) {
 
         <p className="max-w-2xl mx-auto text-base md:text-lg leading-relaxed mb-10" style={{ color: "var(--text-muted)" }}>
           GiwaVerify is a verification layer for the GIWA ecosystem.
-          Every participant is a verified real person — no bots, no sybils.
-          Built on Dojang attestations, it powers token distributions,
-          peer-to-peer trading, and onchain governance with trust by default.
+          Every wallet must be linked to a real person through Dojang attestations.
+          This makes token distributions, P2P trading, and onchain governance
+          sybil-resistant by default.
         </p>
 
         <div className="flex items-center justify-center gap-4">
@@ -71,12 +71,11 @@ function AboutSection() {
 
         <div className="space-y-5 text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
           <p className="text-base">
-            GiwaVerify is a <strong className="font-medium" style={{ color: "var(--text-secondary)" }}>KYC-gated dApp ecosystem</strong> built on GIWA Chain —
-            a high-performance OP Stack L2 with 1-second block times and Flashblocks preconfirmation.
+            GiwaVerify is a <strong className="font-medium" style={{ color: "var(--text-secondary)" }}>KYC-gated dApp ecosystem</strong> built on GIWA Chain.
+            GIWA is a high-performance OP Stack L2 with 1-second block times and Flashblocks preconfirmation.
           </p>
           <p className="text-base">
-            The core idea is simple: before anyone can participate in any dApp on the platform,
-            they must first pass identity verification through <strong className="font-medium" style={{ color: "var(--text-secondary)" }}>Dojang</strong>,
+            Anyone who wants to use a dApp on this platform must first pass identity verification through <strong className="font-medium" style={{ color: "var(--text-secondary)" }}>Dojang</strong>,
             GIWA's onchain attestation system powered by Upbit KYC.
           </p>
           <p className="text-base">
@@ -84,7 +83,7 @@ function AboutSection() {
             No bots, no fake accounts, no wash trading.
           </p>
           <p className="text-base">
-            GiwaVerify exposes three core modules once a wallet is verified:
+            GiwaVerify unlocks three core modules after verification:
           </p>
         </div>
       </div>
@@ -143,7 +142,7 @@ function FeaturesSection() {
   const features = [
     {
       title: "Airdrop",
-      desc: "Distribute tokens only to verified wallets. No sybil claims, no bot farming — every recipient is a real person.",
+      desc: "Distribute tokens only to verified wallets. No sybil claims, no bot farming. Every recipient must be a real person.",
       accent: "var(--accent-airdrop)",
       bg: "var(--accent-airdrop-soft)",
       svg: (
@@ -156,7 +155,7 @@ function FeaturesSection() {
     },
     {
       title: "P2P Trading",
-      desc: "Trade assets directly between verified peers. Listings are only visible and tradeable by verified wallets.",
+      desc: "Trade assets directly with other verified users. Only verified wallets can see or trade listings.",
       accent: "var(--accent-p2p)",
       bg: "var(--accent-p2p-soft)",
       svg: (
@@ -167,7 +166,7 @@ function FeaturesSection() {
     },
     {
       title: "Governance",
-      desc: "Create and vote on ecosystem proposals. One person, one vote — verified identity prevents vote manipulation.",
+      desc: "Create and vote on ecosystem proposals. One person, one vote stops manipulation at the source.",
       accent: "var(--accent-vote)",
       bg: "var(--accent-vote-soft)",
       svg: (
@@ -235,7 +234,7 @@ function BenefitsSection() {
     },
     {
       title: "Composable dApps",
-      desc: "Airdrop, P2P, and Governance all use the same verification contract — consistent access control.",
+      desc: "Airdrop, P2P, and Governance all use the same verification contract behind the scenes.",
       svg: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
@@ -305,7 +304,7 @@ function CtaSection({ onConnect }) {
           Ready to get started?
         </h2>
         <p className="text-sm mb-8 max-w-sm mx-auto" style={{ color: "var(--text-muted)" }}>
-          Connect your wallet to verify your identity and unlock the GiwaVerify ecosystem.
+          Connect your wallet to get verified and start using GiwaVerify.
         </p>
         <button
           onClick={onConnect}
@@ -329,7 +328,7 @@ function FooterSection() {
         <a href="https://docs.giwa.io" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-accent)" }} className="hover:underline">Docs</a>
       </p>
       <p className="text-[0.65rem]" style={{ color: "var(--text-dim)", opacity: 0.55 }}>
-        Unofficial community project — built for GASOK 2026, not affiliated with GIWA or Upbit.
+        Unofficial community project built for GASOK 2026. Not affiliated with GIWA or Upbit.
       </p>
     </footer>
   )
@@ -385,7 +384,7 @@ export default function Dashboard() {
       <div className="max-w-6xl mx-auto py-4 space-y-8">
         <div className="text-center pb-2">
           <h2 className="text-2xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>Dashboard</h2>
-          <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>Access your verified-only dApps</p>
+          <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>Your verified dApps</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <AirdropSection />

@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react"
+import { createPortal } from "react-dom"
 import { useConnect } from "wagmi"
 
 const wallets = [
@@ -89,6 +91,19 @@ const wallets = [
 
 export default function WalletModal({ onClose }) {
   const { connect, connectors } = useConnect()
+  const overlayRef = useRef(null)
+
+  useEffect(() => {
+    function handleKey(e) {
+      if (e.key === "Escape") onClose()
+    }
+    document.addEventListener("keydown", handleKey)
+    document.body.style.overflow = "hidden"
+    return () => {
+      document.removeEventListener("keydown", handleKey)
+      document.body.style.overflow = ""
+    }
+  }, [onClose])
 
   function handleConnect(walletId) {
     const connector = connectors.find((c) => c.id === walletId)
@@ -97,11 +112,14 @@ export default function WalletModal({ onClose }) {
     onClose()
   }
 
-  return (
+  return createPortal(
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center"
+      ref={overlayRef}
+      className="fixed inset-0 z-[100] flex items-center justify-center p-4"
       style={{ backgroundColor: "var(--bg-overlay)" }}
-      onClick={onClose}
+      onClick={(e) => {
+        if (e.target === overlayRef.current) onClose()
+      }}
     >
       <div
         className="rounded-2xl p-6 w-80 shadow-2xl animate-scale"
@@ -157,6 +175,7 @@ export default function WalletModal({ onClose }) {
           New to Web3? Install MetaMask or OKX Wallet
         </p>
       </div>
-    </div>
+    </div>,
+    document.body
   )
 }

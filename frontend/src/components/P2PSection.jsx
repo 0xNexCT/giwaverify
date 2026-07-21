@@ -1,13 +1,16 @@
 import { useState } from "react"
-import { useWriteContract, useReadContract } from "wagmi"
+import { useWriteContract, useReadContract, useSwitchChain, useChainId } from "wagmi"
 import { parseEther } from "viem"
-import { CONTRACTS } from "../config"
+import { CONTRACTS, GIWA_CHAIN } from "../config"
 import GiwaP2PAbi from "../abis/GiwaP2P.json"
 
 export default function P2PSection() {
   const [id, setId] = useState("")
   const [price, setPrice] = useState("")
+  const [switchStatus, setSwitchStatus] = useState("idle")
   const { writeContract, isPending } = useWriteContract()
+  const chainId = useChainId()
+  const { switchChainAsync } = useSwitchChain()
 
   const { data: count } = useReadContract({
     address: CONTRACTS.p2p,
@@ -15,8 +18,21 @@ export default function P2PSection() {
     functionName: "listingCount",
   })
 
-  function handleBuy() {
+  async function handleBuy() {
     if (!id || !price) return
+    setSwitchStatus("idle")
+
+    if (chainId !== GIWA_CHAIN.id) {
+      try {
+        setSwitchStatus("switching")
+        await switchChainAsync({ chainId: GIWA_CHAIN.id })
+        setSwitchStatus("idle")
+      } catch {
+        setSwitchStatus("error")
+        return
+      }
+    }
+
     writeContract({
       address: CONTRACTS.p2p,
       abi: GiwaP2PAbi,
@@ -67,13 +83,20 @@ export default function P2PSection() {
             />
             <button
               onClick={handleBuy}
-              disabled={!id || !price || isPending}
+              disabled={!id || !price || isPending || switchStatus === "switching"}
               className="btn-accent-p2p px-5 py-2.5 rounded-lg text-sm font-semibold"
             >
-              {isPending ? "Buying..." : "Buy"}
+              {switchStatus === "switching" ? "Switching..." : isPending ? "Buying..." : "Buy"}
             </button>
           </div>
         </div>
+
+        {switchStatus === "switching" && (
+          <p className="text-xs mt-2" style={{ color: "var(--accent-p2p)" }}>Switching to GIWA network...</p>
+        )}
+        {switchStatus === "error" && (
+          <p className="text-xs mt-2" style={{ color: "var(--text-amber)" }}>Switch rejected. Please switch to GIWA manually.</p>
+        )}
       </div>
     </div>
   )

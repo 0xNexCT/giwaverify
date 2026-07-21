@@ -1,13 +1,16 @@
 import { useState } from "react"
-import { useWriteContract, useReadContract } from "wagmi"
-import { CONTRACTS } from "../config"
+import { useWriteContract, useReadContract, useSwitchChain, useChainId } from "wagmi"
+import { CONTRACTS, GIWA_CHAIN } from "../config"
 import GiwaVoteAbi from "../abis/GiwaVote.json"
 
 export default function VoteSection() {
   const [title, setTitle] = useState("")
   const [desc, setDesc] = useState("")
   const [voteId, setVoteId] = useState("")
+  const [switchStatus, setSwitchStatus] = useState("idle")
   const { writeContract, isPending } = useWriteContract()
+  const chainId = useChainId()
+  const { switchChainAsync } = useSwitchChain()
 
   const { data: count } = useReadContract({
     address: CONTRACTS.vote,
@@ -15,8 +18,21 @@ export default function VoteSection() {
     functionName: "proposalCount",
   })
 
-  function handleCreate() {
+  async function handleCreate() {
     if (!title || !desc) return
+    setSwitchStatus("idle")
+
+    if (chainId !== GIWA_CHAIN.id) {
+      try {
+        setSwitchStatus("switching")
+        await switchChainAsync({ chainId: GIWA_CHAIN.id })
+        setSwitchStatus("idle")
+      } catch {
+        setSwitchStatus("error")
+        return
+      }
+    }
+
     writeContract({
       address: CONTRACTS.vote,
       abi: GiwaVoteAbi,
@@ -25,8 +41,21 @@ export default function VoteSection() {
     })
   }
 
-  function handleVote(support) {
+  async function handleVote(support) {
     if (!voteId) return
+    setSwitchStatus("idle")
+
+    if (chainId !== GIWA_CHAIN.id) {
+      try {
+        setSwitchStatus("switching")
+        await switchChainAsync({ chainId: GIWA_CHAIN.id })
+        setSwitchStatus("idle")
+      } catch {
+        setSwitchStatus("error")
+        return
+      }
+    }
+
     writeContract({
       address: CONTRACTS.vote,
       abi: GiwaVoteAbi,
@@ -77,10 +106,10 @@ export default function VoteSection() {
           />
           <button
             onClick={handleCreate}
-            disabled={!title || !desc || isPending}
+            disabled={!title || !desc || isPending || switchStatus === "switching"}
             className="btn-ghost w-full py-2.5 rounded-lg text-sm font-medium"
           >
-            {isPending ? "Creating..." : "Create Proposal"}
+            {switchStatus === "switching" ? "Switching..." : isPending ? "Creating..." : "Create Proposal"}
           </button>
         </div>
 
@@ -97,20 +126,27 @@ export default function VoteSection() {
           <div className="flex gap-2">
             <button
               onClick={() => handleVote(true)}
-              disabled={!voteId || isPending}
+              disabled={!voteId || isPending || switchStatus === "switching"}
               className="btn-accent-vote-for flex-1 py-2.5 rounded-lg text-sm font-semibold"
             >
-              Approve
+              {switchStatus === "switching" ? "..." : "Approve"}
             </button>
             <button
               onClick={() => handleVote(false)}
-              disabled={!voteId || isPending}
+              disabled={!voteId || isPending || switchStatus === "switching"}
               className="btn-accent-vote-against flex-1 py-2.5 rounded-lg text-sm font-semibold"
             >
-              Reject
+              {switchStatus === "switching" ? "..." : "Reject"}
             </button>
           </div>
         </div>
+
+        {switchStatus === "switching" && (
+          <p className="text-xs mt-3" style={{ color: "var(--accent-vote)" }}>Switching to GIWA network...</p>
+        )}
+        {switchStatus === "error" && (
+          <p className="text-xs mt-3" style={{ color: "var(--text-amber)" }}>Switch rejected. Please switch to GIWA manually.</p>
+        )}
       </div>
     </div>
   )
