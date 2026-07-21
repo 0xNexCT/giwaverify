@@ -17,10 +17,14 @@ export const FAUCET_TOKENS = [
 export const GIWA_CHAIN = {
   id: 91342,
   name: "GIWA Sepolia",
-  rpc: "https://sepolia-rpc.giwa.io",
-  flashblocksRpc: "https://sepolia-rpc-flashblocks.giwa.io",
-  explorer: "https://sepolia-explorer.giwa.io",
-  currency: { name: "ETH", symbol: "ETH", decimals: 18 },
+  nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 },
+  rpcUrls: {
+    default: { http: ["https://sepolia-rpc.giwa.io"] },
+    flashblocks: { http: ["https://sepolia-rpc-flashblocks.giwa.io"] },
+  },
+  blockExplorers: {
+    default: { name: "GIWA Explorer", url: "https://sepolia-explorer.giwa.io" },
+  },
 }
 
 export const WALLETCONNECT_PROJECT_ID = "a7a3a5a5a5a5a5a5a5a5a5a5a5a5a5a5"

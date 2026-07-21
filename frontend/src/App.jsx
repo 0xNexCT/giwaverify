@@ -37,7 +37,7 @@ const wagmiConfig = createConfig({
     coinbaseWallet({ appName: "GiwaVerify" }),
     walletConnect({ projectId: WALLETCONNECT_PROJECT_ID }),
   ],
-  transports: { [GIWA_CHAIN.id]: http(GIWA_CHAIN.rpc) },
+  transports: { [GIWA_CHAIN.id]: http(GIWA_CHAIN.rpcUrls.default.http[0]) },
 })
 
 export default function App() {
