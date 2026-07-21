@@ -9,12 +9,14 @@ contract GiwaFaucet {
     address public owner;
 
     uint256 public constant CLAIM_AMOUNT = 100 * 10**18;
+    uint256 public constant MAX_PER_WALLET = 100 * 10**18;
     uint256 public constant COOLDOWN = 24 hours;
 
     mapping(address => bool) public registeredTokens;
     address[] public tokenList;
 
     mapping(address => mapping(address => uint256)) public lastClaimTime;
+    mapping(address => mapping(address => uint256)) public totalClaimedPerWallet;
 
     event TokenRegistered(address indexed token);
     event Claimed(address indexed user, address indexed token, uint256 amount);
@@ -50,8 +52,13 @@ contract GiwaFaucet {
             IERC20(token).balanceOf(address(this)) >= CLAIM_AMOUNT,
             "Insufficient faucet balance"
         );
+        require(
+            totalClaimedPerWallet[msg.sender][token] + CLAIM_AMOUNT <= MAX_PER_WALLET,
+            "Max per wallet reached"
+        );
 
         lastClaimTime[msg.sender][token] = block.timestamp;
+        totalClaimedPerWallet[msg.sender][token] += CLAIM_AMOUNT;
         IERC20(token).transfer(msg.sender, CLAIM_AMOUNT);
 
         emit Claimed(msg.sender, token, CLAIM_AMOUNT);
