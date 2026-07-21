@@ -1,12 +1,14 @@
 import { useState } from "react"
-import { useAccount } from "wagmi"
+import { useAccount, useChainId } from "wagmi"
 import { useReadContract } from "wagmi"
-import { CONTRACTS } from "../config"
+import { CONTRACTS, GIWA_CHAIN } from "../config"
 import DemoVerifierAbi from "../abis/DemoVerifier.json"
 import FaucetSection from "./FaucetSection"
 import P2PSection from "./P2PSection"
 import VoteSection from "./VoteSection"
 import WalletModal from "./WalletModal"
+
+const GIWA_CHAIN_HEX = "0x" + GIWA_CHAIN.id.toString(16)
 
 function HeroSection({ onConnect }) {
   return (
@@ -336,15 +338,49 @@ function FooterSection() {
 
 export default function Dashboard() {
   const { address, isConnected } = useAccount()
+  const chainId = useChainId()
   const [showModal, setShowModal] = useState(false)
+  const [switchStatus, setSwitchStatus] = useState("idle")
 
-  const { data: isVerified, isLoading } = useReadContract({
+  const { data: isVerified, isLoading, isFetched } = useReadContract({
     address: CONTRACTS.demoVerifier,
     abi: DemoVerifierAbi,
     functionName: "verified",
     args: [address],
     query: { enabled: isConnected },
   })
+
+  const onWrongNetwork = chainId !== GIWA_CHAIN.id
+
+  async function handleSwitch() {
+    if (!window.ethereum) return
+    setSwitchStatus("switching")
+    try {
+      await window.ethereum.request({
+        method: "wallet_switchEthereumChain",
+        params: [{ chainId: GIWA_CHAIN_HEX }],
+      })
+      setSwitchStatus("idle")
+    } catch (e) {
+      if (e.code === 4902) {
+        try {
+          await window.ethereum.request({
+            method: "wallet_addEthereumChain",
+            params: [{
+              chainId: GIWA_CHAIN_HEX,
+              chainName: GIWA_CHAIN.name,
+              nativeCurrency: GIWA_CHAIN.nativeCurrency,
+              rpcUrls: GIWA_CHAIN.rpcUrls.default.http,
+              blockExplorerUrls: [GIWA_CHAIN.blockExplorers.default.url],
+            }],
+          })
+          setSwitchStatus("idle")
+        } catch { setSwitchStatus("error") }
+      } else {
+        setSwitchStatus("error")
+      }
+    }
+  }
 
   if (!isConnected) {
     return (
@@ -361,7 +397,7 @@ export default function Dashboard() {
     )
   }
 
-  if (isLoading) {
+  if (!isFetched) {
     return (
       <div className="max-w-lg mx-auto text-center py-24">
         <div className="w-12 h-12 rounded-xl mx-auto mb-4 border-2 border-t-transparent animate-spin" style={{ borderColor: "var(--text-dim)", borderTopColor: "var(--text-primary)" }} />
@@ -373,7 +409,7 @@ export default function Dashboard() {
   if (isConnected && isVerified === false) {
     return (
       <div className="max-w-lg mx-auto text-center py-24">
-        <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: "var(--bg-amber-soft)" }}>
+        <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: "var(--bg-accent-soft)" }}>
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-amber)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
             <path d="M7 11V7a5 5 0 0110 0v4"/>
@@ -384,6 +420,31 @@ export default function Dashboard() {
         <div className="inline-block px-5 py-2.5 rounded-xl text-sm" style={{ backgroundColor: "var(--bg-card)", color: "var(--text-secondary)", border: "1px solid var(--border-card)" }}>
           Contact the contract owner for access
         </div>
+      </div>
+    )
+  }
+
+  if (onWrongNetwork) {
+    return (
+      <div className="max-w-lg mx-auto text-center py-24">
+        <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: "var(--bg-accent-soft)" }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>
+        </div>
+        <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>Wrong Network</h2>
+        <p className="text-sm mb-8" style={{ color: "var(--text-muted)" }}>Please switch to GIWA Sepolia to continue.</p>
+        <button
+          onClick={handleSwitch}
+          disabled={switchStatus === "switching"}
+          className="btn-primary px-6 py-2.5 rounded-xl text-sm font-semibold"
+        >
+          {switchStatus === "switching" ? "Switching..." : switchStatus === "error" ? "Try Again" : "Switch to GIWA"}
+        </button>
+        {switchStatus === "error" && (
+          <p className="text-xs mt-3" style={{ color: "var(--text-amber)" }}>Switch rejected. Add GIWA manually in your wallet settings.</p>
+        )}
       </div>
     )
   }
