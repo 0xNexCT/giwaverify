@@ -3,7 +3,7 @@ import { useAccount } from "wagmi"
 import { useReadContract } from "wagmi"
 import { CONTRACTS } from "../config"
 import DemoVerifierAbi from "../abis/DemoVerifier.json"
-import AirdropSection from "./AirdropSection"
+import FaucetSection from "./FaucetSection"
 import P2PSection from "./P2PSection"
 import VoteSection from "./VoteSection"
 import WalletModal from "./WalletModal"
@@ -106,7 +106,7 @@ function HowItWorksSection() {
     {
       num: "03",
       title: "Access dApps",
-      desc: "Once verified, you can claim airdrops, trade P2P, and vote on governance proposals.",
+      desc: "Once verified, you can claim test tokens from the faucet, trade P2P, and vote on governance proposals.",
     },
   ]
 
@@ -141,15 +141,15 @@ function HowItWorksSection() {
 function FeaturesSection() {
   const features = [
     {
-      title: "Airdrop",
-      desc: "Distribute tokens only to verified wallets. No sybil claims, no bot farming. Every recipient must be a real person.",
+      title: "Faucet",
+      desc: "Claim test tokens with a 24-hour cooldown per wallet per token. Sybil-resistant distribution for verified users.",
       accent: "var(--accent-airdrop)",
       bg: "var(--accent-airdrop-soft)",
       svg: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-          <path d="M21 12a9 9 0 1 1-9-9"/>
-          <path d="M21 3v6h-6"/>
-          <path d="M12 7v5l3 3"/>
+          <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+          <path d="M2 17l10 5 10-5"/>
+          <path d="M2 12l10 5 10-5"/>
         </svg>
       ),
     },
@@ -234,7 +234,7 @@ function BenefitsSection() {
     },
     {
       title: "Composable dApps",
-      desc: "Airdrop, P2P, and Governance all use the same verification contract behind the scenes.",
+      desc: "Faucet, P2P, and Governance all use the same verification contract behind the scenes.",
       svg: (
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
           <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
@@ -387,7 +387,7 @@ export default function Dashboard() {
           <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>Your verified dApps</p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
-          <AirdropSection />
+          <FaucetSection />
           <P2PSection />
           <VoteSection />
         </div>
