@@ -1,10 +1,11 @@
-import { useAccount, useConnect, useDisconnect } from "wagmi"
-import { injected } from "wagmi/connectors"
+import { useState } from "react"
+import { useAccount, useDisconnect } from "wagmi"
+import WalletModal from "./WalletModal"
 
 export default function Header() {
   const { address, isConnected } = useAccount()
-  const { connect } = useConnect()
   const { disconnect } = useDisconnect()
+  const [showModal, setShowModal] = useState(false)
 
   return (
     <header className="border-b border-gray-800 bg-gray-900/50 backdrop-blur-sm">
@@ -28,7 +29,7 @@ export default function Header() {
             </div>
           ) : (
             <button
-              onClick={() => connect({ connector: injected() })}
+              onClick={() => setShowModal(true)}
               className="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all"
             >
               Connect Wallet
@@ -36,6 +37,7 @@ export default function Header() {
           )}
         </div>
       </div>
+      {showModal && <WalletModal onClose={() => setShowModal(false)} />}
     </header>
   )
 }

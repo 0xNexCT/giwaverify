@@ -14,3 +14,5 @@ export const GIWA_CHAIN = {
   explorer: "https://sepolia-explorer.giwa.io",
   currency: { name: "ETH", symbol: "ETH", decimals: 18 },
 }
+
+export const WALLETCONNECT_PROJECT_ID = "a7a3a5a5a5a5a5a5a5a5a5a5a5a5a5a5"
