@@ -39,26 +39,28 @@ export default function AirdropSection() {
     })
   }
 
+  const total = Number(count ?? 0)
+
   return (
     <div
       className="rounded-xl card-accent-airdrop"
       style={{ backgroundColor: "var(--bg-card)", borderLeft: "1px solid var(--border-card)", borderRight: "1px solid var(--border-card)", borderBottom: "1px solid var(--border-card)" }}
     >
-      <div className="p-6">
-        <div className="flex items-center gap-3 mb-4">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: "var(--accent-airdrop-soft)", color: "var(--accent-airdrop)" }}>
+      <div className="p-6 flex flex-col gap-5">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--accent-airdrop-soft)", color: "var(--accent-airdrop)" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 12a9 9 0 1 1-9-9"/>
               <path d="M21 3v6h-6"/>
               <path d="M12 7v5l3 3"/>
             </svg>
           </div>
-          <div className="flex-1">
-            <h3 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>Airdrop</h3>
-            <p className="text-xs mt-0.5" style={{ color: "var(--text-dim)" }}>Verified-only token claims</p>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base font-semibold truncate" style={{ color: "var(--text-primary)" }}>Airdrop</h3>
+            <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-dim)" }}>Verified-only token claims</p>
           </div>
-          <span className="text-xs font-medium px-3 py-1 rounded-lg" style={{ backgroundColor: "var(--accent-airdrop-soft)", color: "var(--accent-airdrop)" }}>
-            {Number(count ?? 0)} active
+          <span className="shrink-0 whitespace-nowrap text-xs font-medium px-3 py-1 rounded-lg" style={{ backgroundColor: "var(--accent-airdrop-soft)", color: "var(--accent-airdrop)" }}>
+            {total} {total === 1 ? "active" : "active"}
           </span>
         </div>
 
@@ -74,17 +76,30 @@ export default function AirdropSection() {
           <button
             onClick={handleClaim}
             disabled={!airdropId || isPending || switchStatus === "switching"}
-            className="btn-accent-airdrop px-5 py-2.5 rounded-lg text-sm font-semibold"
+            className="btn-accent-airdrop px-5 py-2.5 rounded-lg text-sm font-semibold shrink-0"
           >
             {switchStatus === "switching" ? "Switching..." : isPending ? "Claiming..." : "Claim"}
           </button>
         </div>
 
         {switchStatus === "switching" && (
-          <p className="text-xs mt-2" style={{ color: "var(--accent-airdrop)" }}>Switching to GIWA network...</p>
+          <p className="text-xs" style={{ color: "var(--accent-airdrop)" }}>Switching to GIWA network...</p>
         )}
         {switchStatus === "error" && (
-          <p className="text-xs mt-2" style={{ color: "var(--text-amber)" }}>Switch rejected. Please switch to GIWA manually.</p>
+          <p className="text-xs" style={{ color: "var(--text-amber)" }}>Switch rejected. Please switch to GIWA manually.</p>
+        )}
+
+        {total === 0 && (
+          <div className="text-center pt-2">
+            <div className="w-8 h-8 rounded-lg mx-auto mb-2 flex items-center justify-center" style={{ backgroundColor: "var(--accent-airdrop-soft)", color: "var(--accent-airdrop)" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12a9 9 0 1 1-9-9"/>
+                <path d="M21 3v6h-6"/>
+              </svg>
+            </div>
+            <p className="text-xs" style={{ color: "var(--text-dim)" }}>No active airdrops yet</p>
+            <p className="text-[0.65rem] mt-0.5" style={{ color: "var(--text-dim)", opacity: 0.5 }}>New airdrops will appear here</p>
+          </div>
         )}
       </div>
     </div>

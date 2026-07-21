@@ -386,7 +386,7 @@ export default function Dashboard() {
           <h2 className="text-2xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>Dashboard</h2>
           <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>Your verified dApps</p>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-start">
           <AirdropSection />
           <P2PSection />
           <VoteSection />

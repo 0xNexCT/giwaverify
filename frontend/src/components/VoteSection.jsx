@@ -64,29 +64,31 @@ export default function VoteSection() {
     })
   }
 
+  const total = Number(count ?? 0)
+
   return (
     <div
       className="rounded-xl card-accent-vote"
       style={{ backgroundColor: "var(--bg-card)", borderLeft: "1px solid var(--border-card)", borderRight: "1px solid var(--border-card)", borderBottom: "1px solid var(--border-card)" }}
     >
-      <div className="p-6">
-        <div className="flex items-center gap-3 mb-5">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: "var(--accent-vote-soft)", color: "var(--accent-vote)" }}>
+      <div className="p-6 flex flex-col gap-5">
+        <div className="flex items-center gap-3 min-w-0">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--accent-vote-soft)", color: "var(--accent-vote)" }}>
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M9 12l2 2 4-4"/>
               <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/>
             </svg>
           </div>
-          <div className="flex-1">
-            <h3 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>Governance</h3>
-            <p className="text-xs mt-0.5" style={{ color: "var(--text-dim)" }}>Create and vote on proposals</p>
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base font-semibold truncate" style={{ color: "var(--text-primary)" }}>Governance</h3>
+            <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-dim)" }}>Create and vote on proposals</p>
           </div>
-          <span className="text-xs font-medium px-3 py-1 rounded-lg" style={{ backgroundColor: "var(--accent-vote-soft)", color: "var(--accent-vote)" }}>
-            {Number(count ?? 0)} proposals
+          <span className="shrink-0 whitespace-nowrap text-xs font-medium px-3 py-1 rounded-lg" style={{ backgroundColor: "var(--accent-vote-soft)", color: "var(--accent-vote)" }}>
+            {total} {total === 1 ? "proposal" : "proposals"}
           </span>
         </div>
 
-        <div className="space-y-3 mb-5 pb-5" style={{ borderBottom: "1px solid var(--border-card)" }}>
+        <div className="space-y-3 pb-5" style={{ borderBottom: "1px solid var(--border-card)" }}>
           <p className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--text-dim)" }}>Create Proposal</p>
           <input
             type="text"
@@ -142,10 +144,10 @@ export default function VoteSection() {
         </div>
 
         {switchStatus === "switching" && (
-          <p className="text-xs mt-3" style={{ color: "var(--accent-vote)" }}>Switching to GIWA network...</p>
+          <p className="text-xs" style={{ color: "var(--accent-vote)" }}>Switching to GIWA network...</p>
         )}
         {switchStatus === "error" && (
-          <p className="text-xs mt-3" style={{ color: "var(--text-amber)" }}>Switch rejected. Please switch to GIWA manually.</p>
+          <p className="text-xs" style={{ color: "var(--text-amber)" }}>Switch rejected. Please switch to GIWA manually.</p>
         )}
       </div>
     </div>
