@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useAccount, useChainId } from "wagmi"
+import { useAccount } from "wagmi"
 import { useReadContract } from "wagmi"
 import { CONTRACTS, GIWA_CHAIN } from "../config"
 import DemoVerifierAbi from "../abis/DemoVerifier.json"
@@ -337,20 +337,19 @@ function FooterSection() {
 }
 
 export default function Dashboard() {
-  const { address, isConnected } = useAccount()
-  const chainId = useChainId()
+  const { address, isConnected, chainId } = useAccount()
   const [showModal, setShowModal] = useState(false)
   const [switchStatus, setSwitchStatus] = useState("idle")
 
-  const { data: isVerified, isLoading, isFetched } = useReadContract({
+  const { data: isVerified, isLoading, isFetched, isError } = useReadContract({
     address: CONTRACTS.demoVerifier,
     abi: DemoVerifierAbi,
     functionName: "verified",
     args: [address],
-    query: { enabled: isConnected },
+    query: { enabled: !!address },
   })
 
-  const onWrongNetwork = chainId !== GIWA_CHAIN.id
+  const onWrongNetwork = chainId && chainId !== GIWA_CHAIN.id
 
   async function handleSwitch() {
     if (!window.ethereum) return
@@ -397,29 +396,11 @@ export default function Dashboard() {
     )
   }
 
-  if (!isFetched) {
+  if (isLoading) {
     return (
       <div className="max-w-lg mx-auto text-center py-24">
         <div className="w-12 h-12 rounded-xl mx-auto mb-4 border-2 border-t-transparent animate-spin" style={{ borderColor: "var(--text-dim)", borderTopColor: "var(--text-primary)" }} />
         <p className="text-sm" style={{ color: "var(--text-muted)" }}>Verifying wallet...</p>
-      </div>
-    )
-  }
-
-  if (isConnected && isVerified === false) {
-    return (
-      <div className="max-w-lg mx-auto text-center py-24">
-        <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: "var(--bg-accent-soft)" }}>
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-amber)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-            <path d="M7 11V7a5 5 0 0110 0v4"/>
-          </svg>
-        </div>
-        <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-amber)" }}>Unverified Wallet</h2>
-        <p className="text-sm mb-8" style={{ color: "var(--text-muted)" }}>This wallet is not on the verified list.</p>
-        <div className="inline-block px-5 py-2.5 rounded-xl text-sm" style={{ backgroundColor: "var(--bg-card)", color: "var(--text-secondary)", border: "1px solid var(--border-card)" }}>
-          Contact the contract owner for access
-        </div>
       </div>
     )
   }
@@ -449,6 +430,24 @@ export default function Dashboard() {
     )
   }
 
+  if (isVerified === false) {
+    return (
+      <div className="max-w-lg mx-auto text-center py-24">
+        <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: "var(--bg-accent-soft)" }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-amber)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>
+        </div>
+        <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-amber)" }}>Unverified Wallet</h2>
+        <p className="text-sm mb-8" style={{ color: "var(--text-muted)" }}>This wallet is not on the verified list.</p>
+        <div className="inline-block px-5 py-2.5 rounded-xl text-sm" style={{ backgroundColor: "var(--bg-card)", color: "var(--text-secondary)", border: "1px solid var(--border-card)" }}>
+          Contact the contract owner for access
+        </div>
+      </div>
+    )
+  }
+
   if (isConnected && isVerified) {
     return (
       <div className="max-w-6xl mx-auto py-4 space-y-8">
@@ -465,5 +464,23 @@ export default function Dashboard() {
     )
   }
 
-  return null
+  return (
+    <div className="max-w-lg mx-auto text-center py-24">
+      <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: "var(--bg-accent-soft)" }}>
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <circle cx="12" cy="12" r="10"/>
+          <path d="M12 16v-4M12 8h.01"/>
+        </svg>
+      </div>
+      <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-primary)" }}>Connection Issue</h2>
+      <p className="text-sm mb-8" style={{ color: "var(--text-muted)" }}>Unable to verify wallet. Please ensure you are on the GIWA Sepolia network and try refreshing.</p>
+      <button
+        onClick={handleSwitch}
+        disabled={switchStatus === "switching"}
+        className="btn-primary px-6 py-2.5 rounded-xl text-sm font-semibold"
+      >
+        {switchStatus === "switching" ? "Switching..." : "Switch to GIWA"}
+      </button>
+    </div>
+  )
 }
