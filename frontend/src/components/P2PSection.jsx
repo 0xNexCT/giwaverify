@@ -58,7 +58,7 @@ export default function P2PSection() {
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-base font-semibold truncate" style={{ color: "var(--text-primary)" }}>P2P Marketplace</h3>
-            <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-dim)" }}>Trade directly with verified peers</p>
+            <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-secondary)" }}>Trade directly with verified peers</p>
           </div>
           <span className="shrink-0 whitespace-nowrap text-xs font-medium px-3 py-1 rounded-lg" style={{ backgroundColor: "var(--accent-p2p-soft)", color: "var(--accent-p2p)" }}>
             {total} {total === 1 ? "listing" : "listings"}
@@ -107,8 +107,8 @@ export default function P2PSection() {
                 <path d="M7 17l9.2-9.2M17 17V7H7"/>
               </svg>
             </div>
-            <p className="text-xs" style={{ color: "var(--text-dim)" }}>No listings yet</p>
-            <p className="text-[0.65rem] mt-0.5" style={{ color: "var(--text-dim)", opacity: 0.5 }}>New trades will appear here</p>
+            <p className="text-xs" style={{ color: "var(--text-secondary)" }}>No listings yet</p>
+            <p className="text-[0.65rem] mt-0.5" style={{ color: "var(--text-dim)" }}>New trades will appear here</p>
           </div>
         )}
       </div>

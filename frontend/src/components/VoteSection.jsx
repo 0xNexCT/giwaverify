@@ -81,7 +81,7 @@ export default function VoteSection() {
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-base font-semibold truncate" style={{ color: "var(--text-primary)" }}>Governance</h3>
-            <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-dim)" }}>Create and vote on proposals</p>
+            <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-secondary)" }}>Create and vote on proposals</p>
           </div>
           <span className="shrink-0 whitespace-nowrap text-xs font-medium px-3 py-1 rounded-lg" style={{ backgroundColor: "var(--accent-vote-soft)", color: "var(--accent-vote)" }}>
             {total} {total === 1 ? "proposal" : "proposals"}
@@ -89,7 +89,7 @@ export default function VoteSection() {
         </div>
 
         <div className="space-y-3 pb-5" style={{ borderBottom: "1px solid var(--border-card)" }}>
-          <p className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--text-dim)" }}>Create Proposal</p>
+          <p className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Create Proposal</p>
           <input
             type="text"
             value={title}
@@ -116,7 +116,7 @@ export default function VoteSection() {
         </div>
 
         <div className="space-y-3">
-          <p className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--text-dim)" }}>Cast Vote</p>
+          <p className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--text-secondary)" }}>Cast Vote</p>
           <input
             type="number"
             value={voteId}

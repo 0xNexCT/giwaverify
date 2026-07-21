@@ -19,8 +19,8 @@
 
   --text-primary: #ffffff;
   --text-secondary: #a3a3a3;
-  --text-muted: #737373;
-  --text-dim: #525252;
+  --text-muted: #8a8a8a;
+  --text-dim: #737373;
   --text-input: #e5e5e5;
   --text-accent: #ffffff;
   --text-amber: #fbbf24;
@@ -29,12 +29,12 @@
   --btn-primary-hover: #e5e5e5;
   --btn-primary-text: #000000;
   --btn-primary-disabled-bg: #141414;
-  --btn-primary-disabled-text: #525252;
+  --btn-primary-disabled-text: #737373;
 
   --btn-ghost-bg: rgba(255, 255, 255, 0.05);
   --btn-ghost-hover: rgba(255, 255, 255, 0.08);
   --btn-ghost-text: #a3a3a3;
-  --btn-ghost-disabled-text: #525252;
+  --btn-ghost-disabled-text: #737373;
 
   --accent-faucet: #10b981;
   --accent-p2p: #3b82f6;

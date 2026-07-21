@@ -171,7 +171,7 @@ export default function WalletModal({ onClose }) {
             )
           })}
         </div>
-        <p className="text-xs text-center mt-5" style={{ color: "var(--text-dim)" }}>
+        <p className="text-xs text-center mt-5" style={{ color: "var(--text-secondary)" }}>
           New to Web3? Install MetaMask or OKX Wallet
         </p>
       </div>

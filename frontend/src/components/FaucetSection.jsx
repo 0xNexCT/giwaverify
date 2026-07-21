@@ -149,7 +149,7 @@ export default function FaucetSection() {
           </div>
           <div className="flex-1 min-w-0">
             <h3 className="text-base font-semibold truncate" style={{ color: "var(--text-primary)" }}>Faucet</h3>
-            <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-dim)" }}>Claim test tokens</p>
+            <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-secondary)" }}>Claim test tokens</p>
           </div>
           <span className="shrink-0 whitespace-nowrap text-xs font-medium px-3 py-1 rounded-lg" style={{ backgroundColor: "var(--accent-faucet-soft)", color: "var(--accent-faucet)" }}>
             {FAUCET_TOKENS.length} tokens
@@ -163,8 +163,8 @@ export default function FaucetSection() {
               onClick={() => setSelectedIdx(i)}
               className="text-xs font-medium px-3 py-1.5 rounded-lg transition-all"
               style={{
-                backgroundColor: selectedIdx === i ? "var(--accent-faucet-soft)" : "var(--btn-ghost-bg)",
-                color: selectedIdx === i ? "var(--accent-faucet)" : "var(--text-dim)",
+                backgroundColor: selectedIdx === i ? "var(--accent-faucet-soft)" : "var(--bg-card-hover)",
+                color: selectedIdx === i ? "var(--accent-faucet)" : "var(--text-secondary)",
                 border: selectedIdx === i ? "1px solid var(--accent-faucet)" : "1px solid transparent",
               }}
             >
@@ -173,18 +173,18 @@ export default function FaucetSection() {
           ))}
         </div>
 
-        <div className="space-y-2 text-xs" style={{ color: "var(--text-dim)" }}>
+        <div className="space-y-2 text-xs" style={{ color: "var(--text-secondary)" }}>
           <div className="flex justify-between">
             <span>Claim Amount</span>
-            <span className="font-medium" style={{ color: "var(--text-secondary)" }}>{fmt(rawClaimable)} {symbol || "..."}</span>
+            <span className="font-medium" style={{ color: "var(--text-primary)" }}>{fmt(rawClaimable)} {symbol || "..."}</span>
           </div>
           <div className="flex justify-between">
             <span>Faucet Balance</span>
-            <span className="font-medium" style={{ color: "var(--text-secondary)" }}>{fmt(rawFaucet)} {symbol || "..."}</span>
+            <span className="font-medium" style={{ color: "var(--text-primary)" }}>{fmt(rawFaucet)} {symbol || "..."}</span>
           </div>
           <div className="flex justify-between">
             <span>Your Balance</span>
-            <span className="font-medium" style={{ color: "var(--text-secondary)" }}>{fmt(rawUser)} {symbol || "..."}</span>
+            <span className="font-medium" style={{ color: "var(--text-primary)" }}>{fmt(rawUser)} {symbol || "..."}</span>
           </div>
         </div>
 

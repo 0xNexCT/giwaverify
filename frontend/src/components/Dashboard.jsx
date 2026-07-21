@@ -128,7 +128,7 @@ function HowItWorksSection() {
             <span className="numbered-step mb-3" style={{ display: "block" }}>
               <span className="num">{step.num}</span> · {step.title}
             </span>
-            <p className="text-sm leading-relaxed mt-3" style={{ color: "var(--text-dim)" }}>
+            <p className="text-sm leading-relaxed mt-3" style={{ color: "var(--text-secondary)" }}>
               {step.desc}
             </p>
           </div>
@@ -202,7 +202,7 @@ function FeaturesSection() {
             <h3 className="text-lg font-semibold mb-3" style={{ color: "var(--text-secondary)" }}>
               {f.title}
             </h3>
-            <p className="text-sm leading-relaxed" style={{ color: "var(--text-dim)" }}>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
               {f.desc}
             </p>
           </div>
@@ -279,7 +279,7 @@ function BenefitsSection() {
               <h3 className="text-sm font-semibold mb-1.5" style={{ color: "var(--text-secondary)" }}>
                 {item.title}
               </h3>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--text-dim)" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--text-secondary)" }}>
                 {item.desc}
               </p>
             </div>
@@ -320,14 +320,14 @@ function CtaSection({ onConnect }) {
 function FooterSection() {
   return (
     <footer className="py-10 text-center border-t" style={{ borderColor: "var(--border-header)" }}>
-      <p className="text-xs mb-4" style={{ color: "var(--text-dim)" }}>
+      <p className="text-xs mb-4" style={{ color: "var(--text-secondary)" }}>
         Built on <a href="https://giwa.io" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-accent)" }} className="hover:underline">GIWA Chain</a>
         &nbsp;·&nbsp;
         <a href="https://sepolia-explorer.giwa.io" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-accent)" }} className="hover:underline">Explorer</a>
         &nbsp;·&nbsp;
         <a href="https://docs.giwa.io" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-accent)" }} className="hover:underline">Docs</a>
       </p>
-      <p className="text-[0.65rem]" style={{ color: "var(--text-dim)", opacity: 0.55 }}>
+      <p className="text-[0.65rem]" style={{ color: "var(--text-dim)" }}>
         Unofficial community project built for GASOK 2026. Not affiliated with GIWA or Upbit.
       </p>
     </footer>

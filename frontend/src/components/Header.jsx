@@ -48,9 +48,9 @@ export default function Header({ theme, onToggleTheme }) {
               <button
                 onClick={disconnect}
                 className="text-xs transition-colors font-medium"
-                style={{ color: "var(--text-dim)" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "var(--text-muted)"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-dim)"}
+                style={{ color: "var(--text-muted)" }}
+                onMouseEnter={(e) => e.currentTarget.style.color = "var(--text-secondary)"}
+                onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-muted)"}
               >
                 Exit
               </button>
