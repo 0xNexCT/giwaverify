@@ -1,7 +1,37 @@
 import { useState, useEffect, useCallback } from "react"
-import { useWriteContract, useReadContract, useSwitchChain, useChainId, useAccount } from "wagmi"
+import { useWriteContract, useReadContract, useChainId, useAccount } from "wagmi"
 import { CONTRACTS, GIWA_CHAIN, FAUCET_TOKENS } from "../config"
 import GiwaFaucetAbi from "../abis/GiwaFaucet.json"
+
+const GIWA_CHAIN_HEX = "0x" + GIWA_CHAIN.id.toString(16)
+
+async function ensureChain() {
+  if (!window.ethereum) return false
+  try {
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: GIWA_CHAIN_HEX }],
+    })
+    return true
+  } catch (e) {
+    if (e.code === 4902) {
+      try {
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [{
+            chainId: GIWA_CHAIN_HEX,
+            chainName: GIWA_CHAIN.name,
+            nativeCurrency: GIWA_CHAIN.nativeCurrency,
+            rpcUrls: GIWA_CHAIN.rpcUrls.default.http,
+            blockExplorerUrls: [GIWA_CHAIN.blockExplorers.default.url],
+          }],
+        })
+        return true
+      } catch { return false }
+    }
+    return false
+  }
+}
 
 const ERC20_MIN_ABI = [
   {
@@ -115,14 +145,10 @@ export default function FaucetSection() {
     setSwitchStatus("idle")
 
     if (chainId !== GIWA_CHAIN.id) {
-      try {
-        setSwitchStatus("switching")
-        await switchChainAsync({ chainId: GIWA_CHAIN.id })
-        setSwitchStatus("idle")
-      } catch {
-        setSwitchStatus("error")
-        return
-      }
+      setSwitchStatus("switching")
+      const ok = await ensureChain()
+      if (!ok) { setSwitchStatus("error"); return }
+      setSwitchStatus("idle")
     }
 
     writeContract({

@@ -1,8 +1,38 @@
 import { useState } from "react"
-import { useWriteContract, useReadContract, useSwitchChain, useChainId } from "wagmi"
+import { useWriteContract, useReadContract, useChainId } from "wagmi"
 import { parseEther } from "viem"
 import { CONTRACTS, GIWA_CHAIN } from "../config"
 import GiwaP2PAbi from "../abis/GiwaP2P.json"
+
+const GIWA_CHAIN_HEX = "0x" + GIWA_CHAIN.id.toString(16)
+
+async function ensureChain() {
+  if (!window.ethereum) return false
+  try {
+    await window.ethereum.request({
+      method: "wallet_switchEthereumChain",
+      params: [{ chainId: GIWA_CHAIN_HEX }],
+    })
+    return true
+  } catch (e) {
+    if (e.code === 4902) {
+      try {
+        await window.ethereum.request({
+          method: "wallet_addEthereumChain",
+          params: [{
+            chainId: GIWA_CHAIN_HEX,
+            chainName: GIWA_CHAIN.name,
+            nativeCurrency: GIWA_CHAIN.nativeCurrency,
+            rpcUrls: GIWA_CHAIN.rpcUrls.default.http,
+            blockExplorerUrls: [GIWA_CHAIN.blockExplorers.default.url],
+          }],
+        })
+        return true
+      } catch { return false }
+    }
+    return false
+  }
+}
 
 export default function P2PSection() {
   const [id, setId] = useState("")
@@ -10,7 +40,6 @@ export default function P2PSection() {
   const [switchStatus, setSwitchStatus] = useState("idle")
   const { writeContract, isPending } = useWriteContract()
   const chainId = useChainId()
-  const { switchChainAsync } = useSwitchChain()
 
   const { data: count } = useReadContract({
     address: CONTRACTS.p2p,
@@ -23,14 +52,10 @@ export default function P2PSection() {
     setSwitchStatus("idle")
 
     if (chainId !== GIWA_CHAIN.id) {
-      try {
-        setSwitchStatus("switching")
-        await switchChainAsync({ chainId: GIWA_CHAIN.id })
-        setSwitchStatus("idle")
-      } catch {
-        setSwitchStatus("error")
-        return
-      }
+      setSwitchStatus("switching")
+      const ok = await ensureChain()
+      if (!ok) { setSwitchStatus("error"); return }
+      setSwitchStatus("idle")
     }
 
     writeContract({
