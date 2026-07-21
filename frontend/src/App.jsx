@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { WagmiProvider, http, createConfig } from "wagmi"
-import { injected, metaMask, coinbaseWallet, walletConnect } from "wagmi/connectors"
+import { injected, coinbaseWallet, walletConnect } from "wagmi/connectors"
 import { GIWA_CHAIN, WALLETCONNECT_PROJECT_ID } from "./config"
 import Header from "./components/Header"
 import Dashboard from "./components/Dashboard"
@@ -10,8 +10,10 @@ const queryClient = new QueryClient()
 const wagmiConfig = createConfig({
   chains: [GIWA_CHAIN],
   connectors: [
-    injected(),
-    metaMask(),
+    injected({ target: "metaMask" }),
+    injected({ target: "okxWallet" }),
+    injected({ target: "rabby" }),
+    injected({ target: "phantom" }),
     coinbaseWallet({ appName: "GiwaVerify" }),
     walletConnect({ projectId: WALLETCONNECT_PROJECT_ID }),
   ],
