@@ -58,7 +58,7 @@ export default function App() {
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
         <Header theme={theme} onToggleTheme={toggleTheme} />
-        <main className="max-w-5xl mx-auto px-6 py-12 animate-in">
+        <main className="px-6 md:px-12 lg:px-20 py-12 animate-in">
           <Dashboard />
         </main>
       </QueryClientProvider>

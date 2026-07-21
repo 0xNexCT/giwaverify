@@ -30,7 +30,7 @@ function HeroSection({ onConnect }) {
           <span style={{ color: "var(--text-accent)" }}>GIWA Chain</span>
         </h1>
 
-        <p className="max-w-xl mx-auto text-sm leading-relaxed mb-10" style={{ color: "var(--text-muted)" }}>
+        <p className="max-w-3xl mx-auto text-base leading-relaxed mb-10" style={{ color: "var(--text-muted)" }}>
           GiwaVerify is a verification layer for the GIWA ecosystem.
           Every participant is a verified real person — no bots, no sybils.
           Built on Dojang attestations, it powers<strong className="font-medium" style={{ color: "var(--text-secondary)" }}> token distributions,
@@ -62,7 +62,7 @@ function HeroSection({ onConnect }) {
 function AboutSection() {
   return (
     <section className="py-16 md:py-20">
-      <div className="max-w-3xl mx-auto text-center">
+      <div className="max-w-5xl mx-auto text-center">
         <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>
           What is GiwaVerify?
         </h2>
@@ -119,7 +119,7 @@ function HowItWorksSection() {
       <h2 className="text-2xl font-bold text-center mb-12" style={{ color: "var(--text-primary)" }}>
         How It Works
       </h2>
-      <div className="max-w-3xl mx-auto space-y-6">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
         {steps.map((step) => (
           <div
             key={step.num}
@@ -192,14 +192,14 @@ function FeaturesSection() {
       <p className="text-sm text-center max-w-md mx-auto mb-10" style={{ color: "var(--text-muted)" }}>
         Three powerful dApps that unlock when your wallet is verified
       </p>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {features.map((f) => (
           <div
             key={f.title}
-            className="rounded-xl p-6"
+            className="rounded-xl p-7"
             style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border-card)" }}
           >
-            <div className="w-10 h-10 rounded-xl mb-4 flex items-center justify-center" style={{ backgroundColor: f.bg }}>
+            <div className="w-11 h-11 rounded-xl mb-4 flex items-center justify-center" style={{ backgroundColor: f.bg }}>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={f.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
                 {f.icon}
                 {f.icon2}
@@ -248,14 +248,14 @@ function BenefitsSection() {
       <h2 className="text-2xl font-bold text-center mb-12" style={{ color: "var(--text-primary)" }}>
         Why GiwaVerify?
       </h2>
-      <div className="max-w-3xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {items.map((item) => (
           <div
             key={item.title}
-            className="rounded-xl p-5 flex items-start gap-4"
+            className="rounded-xl p-6 flex items-start gap-4"
             style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border-card)" }}
           >
-            <span className="text-lg shrink-0 mt-0.5">{item.icon}</span>
+            <span className="text-xl shrink-0 mt-0.5">{item.icon}</span>
             <div>
               <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-secondary)" }}>
                 {item.title}
@@ -274,7 +274,7 @@ function BenefitsSection() {
 function CtaSection({ onConnect }) {
   return (
     <section className="py-16 md:py-20 text-center">
-      <div className="max-w-sm mx-auto rounded-2xl py-12 px-8" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
+      <div className="max-w-xl mx-auto rounded-2xl py-12 px-8" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
         <div className="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: "var(--bg-accent-soft)" }}>
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
@@ -342,7 +342,7 @@ export default function Dashboard() {
 
   if (isConnected && isVerified === false) {
     return (
-      <div className="max-w-md mx-auto text-center py-20">
+      <div className="max-w-xl mx-auto text-center py-20">
         <div className="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: "var(--bg-amber-soft)" }}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-amber)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>

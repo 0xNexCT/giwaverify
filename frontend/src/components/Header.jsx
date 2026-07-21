@@ -9,7 +9,7 @@ export default function Header({ theme, onToggleTheme }) {
 
   return (
     <header className="border-b backdrop-blur-sm sticky top-0 z-40" style={{ borderColor: "var(--border-header)", backgroundColor: "var(--bg-header)" }}>
-      <div className="max-w-5xl mx-auto px-6 h-14 flex items-center justify-between">
+      <div className="px-6 md:px-12 lg:px-20 h-14 flex items-center justify-between">
         <div className="flex items-center gap-2.5">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-accent)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
             <path d="M12 2L2 7l10 5 10-5-10-5z"/>
