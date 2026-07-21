@@ -41,15 +41,8 @@ const wallets = [
     gradient: "from-blue-500 to-blue-700",
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
-        <rect width="40" height="40" rx="8" fill="white"/>
-        <rect x="5.333" y="5.333" width="8" height="8" rx="1.5" fill="#0C0C0D"/>
-        <rect x="16" y="5.333" width="8" height="8" rx="1.5" fill="#0C0C0D"/>
-        <rect x="26.667" y="5.333" width="8" height="8" rx="1.5" fill="#0C0C0D"/>
-        <rect x="5.333" y="16" width="8" height="8" rx="1.5" fill="#0C0C0D"/>
-        <rect x="26.667" y="16" width="8" height="8" rx="1.5" fill="#0C0C0D"/>
-        <rect x="5.333" y="26.667" width="8" height="8" rx="1.5" fill="#0C0C0D"/>
-        <rect x="16" y="26.667" width="8" height="8" rx="1.5" fill="#0C0C0D"/>
-        <rect x="26.667" y="26.667" width="8" height="8" rx="1.5" fill="#0C0C0D"/>
+        <rect width="40" height="40" rx="10" fill="#1A80F8"/>
+        <path d="M12 12h4v4h-4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4zM12 18h4v4h-4v-4zm12 0h4v4h-4v-4zM12 24h4v4h-4v-4zm6 0h4v4h-4v-4zm6 0h4v4h-4v-4z" fill="white"/>
       </svg>
     ),
   },
