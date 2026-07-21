@@ -338,7 +338,7 @@ export default function Dashboard() {
   const { address, isConnected } = useAccount()
   const [showModal, setShowModal] = useState(false)
 
-  const { data: isVerified } = useReadContract({
+  const { data: isVerified, isLoading } = useReadContract({
     address: CONTRACTS.demoVerifier,
     abi: DemoVerifierAbi,
     functionName: "verified",
@@ -357,6 +357,15 @@ export default function Dashboard() {
         <CtaSection onConnect={() => setShowModal(true)} />
         <FooterSection />
         {showModal && <WalletModal onClose={() => setShowModal(false)} />}
+      </div>
+    )
+  }
+
+  if (isLoading) {
+    return (
+      <div className="max-w-lg mx-auto text-center py-24">
+        <div className="w-12 h-12 rounded-xl mx-auto mb-4 border-2 border-t-transparent animate-spin" style={{ borderColor: "var(--text-dim)", borderTopColor: "var(--text-primary)" }} />
+        <p className="text-sm" style={{ color: "var(--text-muted)" }}>Verifying wallet...</p>
       </div>
     )
   }
