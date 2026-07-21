@@ -99,21 +99,14 @@ export default function WalletModal({ onClose }) {
   function handleConnect(walletId) {
     const connector = connectors.find((c) => c.id === walletId)
     if (!connector) return
-    const opts = {}
-    if (walletId === "coinbaseWallet") {
-      opts.appName = "GiwaVerify"
-    }
-    if (walletId === "walletConnect") {
-      opts.projectId = "a7a3a5a5a5a5a5a5a5a5a5a5a5a5a5a5"
-    }
-    connect({ connector, ...(Object.keys(opts).length ? { options: opts } : {}) })
+    connect({ connector })
     onClose()
   }
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
       <div
-        className="bg-[#121214] border border-white/10 rounded-2xl p-6 w-80 shadow-2xl"
+        className="bg-[#121214] border border-white/10 rounded-2xl p-6 w-80 shadow-2xl animate-scale"
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-5">
