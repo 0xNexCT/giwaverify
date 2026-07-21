@@ -10,10 +10,10 @@ import WalletModal from "./WalletModal"
 
 function HeroSection({ onConnect }) {
   return (
-    <section className="relative pt-16 pb-20 md:pt-24 md:pb-28 text-center overflow-hidden">
+    <section className="relative pt-20 pb-24 md:pt-28 md:pb-32 text-center overflow-hidden">
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full opacity-30 blur-3xl" style={{ backgroundColor: "var(--bg-accent-soft)" }} />
-        <div className="absolute bottom-0 right-0 w-[400px] h-[400px] rounded-full opacity-20 blur-3xl" style={{ backgroundColor: "var(--bg-blue-soft)" }} />
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full opacity-[0.08] blur-3xl" style={{ backgroundColor: "var(--text-primary)" }} />
+        <div className="absolute -bottom-20 left-1/4 w-[500px] h-[500px] rounded-full opacity-[0.04] blur-3xl" style={{ backgroundColor: "var(--text-primary)" }} />
       </div>
 
       <div className="relative">
@@ -25,23 +25,23 @@ function HeroSection({ onConnect }) {
           </svg>
         </div>
 
-        <h1 className="text-4xl md:text-5xl font-bold tracking-tight leading-tight mb-5" style={{ color: "var(--text-primary)" }}>
-          KYC-Gated dApps on <br />
-          <span style={{ color: "var(--text-accent)" }}>GIWA Chain</span>
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tight leading-none mb-6" style={{ color: "var(--text-primary)" }}>
+          KYC-Gated dApps
+          <br />
+          <span style={{ color: "var(--text-accent)" }}>on GIWA Chain</span>
         </h1>
 
-        <p className="max-w-3xl mx-auto text-base leading-relaxed mb-10" style={{ color: "var(--text-muted)" }}>
+        <p className="max-w-2xl mx-auto text-base md:text-lg leading-relaxed mb-10" style={{ color: "var(--text-muted)" }}>
           GiwaVerify is a verification layer for the GIWA ecosystem.
           Every participant is a verified real person — no bots, no sybils.
-          Built on Dojang attestations, it powers<strong className="font-medium" style={{ color: "var(--text-secondary)" }}> token distributions,
-          peer-to-peer trading, and onchain governance</strong> with trust by default.
+          Built on Dojang attestations, it powers token distributions,
+          peer-to-peer trading, and onchain governance with trust by default.
         </p>
 
         <div className="flex items-center justify-center gap-4">
           <button
             onClick={onConnect}
-            className="btn-primary px-6 py-2.5 rounded-xl text-sm font-semibold shadow-lg"
-            style={{ boxShadow: "0 0 24px -4px var(--btn-primary-bg)" }}
+            className="btn-primary px-7 py-3 rounded-xl text-sm font-semibold"
           >
             Connect Wallet
           </button>
@@ -49,7 +49,7 @@ function HeroSection({ onConnect }) {
             href="https://sepolia-explorer.giwa.io"
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-ghost px-6 py-2.5 rounded-xl text-sm font-medium"
+            className="btn-ghost px-7 py-3 rounded-xl text-sm font-medium"
           >
             View Explorer
           </a>
@@ -61,26 +61,32 @@ function HeroSection({ onConnect }) {
 
 function AboutSection() {
   return (
-    <section className="py-16 md:py-20">
-      <div className="max-w-5xl mx-auto text-center">
-        <h2 className="text-2xl font-bold mb-6" style={{ color: "var(--text-primary)" }}>
+    <section className="py-20 md:py-24">
+      <div className="max-w-4xl mx-auto">
+        <div className="flex items-center gap-3 mb-8">
+          <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
+          <span className="text-xs font-medium uppercase tracking-widest" style={{ color: "var(--text-dim)" }}>About</span>
+        </div>
+
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-8" style={{ color: "var(--text-primary)" }}>
           What is GiwaVerify?
         </h2>
-        <div className="space-y-4 text-sm leading-relaxed text-left" style={{ color: "var(--text-muted)" }}>
-          <p>
+
+        <div className="space-y-5 text-sm leading-relaxed" style={{ color: "var(--text-muted)" }}>
+          <p className="text-base">
             GiwaVerify is a <strong className="font-medium" style={{ color: "var(--text-secondary)" }}>KYC-gated dApp ecosystem</strong> built on GIWA Chain —
             a high-performance OP Stack L2 with 1-second block times and Flashblocks preconfirmation.
           </p>
-          <p>
+          <p className="text-base">
             The core idea is simple: before anyone can participate in any dApp on the platform,
             they must first pass identity verification through <strong className="font-medium" style={{ color: "var(--text-secondary)" }}>Dojang</strong>,
             GIWA's onchain attestation system powered by Upbit KYC.
           </p>
-          <p>
+          <p className="text-base">
             This creates a <strong className="font-medium" style={{ color: "var(--text-secondary)" }}>sybil-resistant environment</strong> where every wallet is linked to a verified real person.
             No bots, no fake accounts, no wash trading.
           </p>
-          <p>
+          <p className="text-base">
             GiwaVerify exposes three core modules once a wallet is verified:
           </p>
         </div>
@@ -95,51 +101,50 @@ function HowItWorksSection() {
       num: "01",
       title: "Connect Your Wallet",
       desc: "Link your wallet to GiwaVerify using MetaMask, OKX, or any supported wallet on GIWA Chain.",
-      accent: "var(--text-accent)",
-      bg: "var(--bg-accent-soft)",
     },
     {
       num: "02",
       title: "Verify Identity",
       desc: "The contract checks if your wallet has a valid Dojang attestation from the GIWA ecosystem.",
-      accent: "var(--text-blue)",
-      bg: "var(--bg-blue-soft)",
     },
     {
       num: "03",
       title: "Access dApps",
       desc: "Once verified, you can claim airdrops, trade P2P, and vote on governance proposals.",
-      accent: "var(--text-purple)",
-      bg: "var(--bg-purple-soft)",
     },
   ]
 
   return (
-    <section className="py-16 md:py-20">
-      <h2 className="text-2xl font-bold text-center mb-12" style={{ color: "var(--text-primary)" }}>
+    <section className="py-20 md:py-24">
+      <div className="flex items-center gap-3 mb-8 justify-center">
+        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
+        <span className="text-xs font-medium uppercase tracking-widest" style={{ color: "var(--text-dim)" }}>Process</span>
+        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
+      </div>
+
+      <h2 className="text-3xl md:text-4xl font-bold text-center tracking-tight mb-14" style={{ color: "var(--text-primary)" }}>
         How It Works
       </h2>
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6">
-        {steps.map((step) => (
+
+      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+        {steps.map((step, i) => (
           <div
             key={step.num}
-            className="rounded-xl p-6 flex items-start gap-5"
+            className="rounded-xl p-7 text-center"
             style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border-card)" }}
           >
             <div
-              className="w-10 h-10 rounded-xl flex items-center justify-center text-sm font-bold shrink-0"
-              style={{ backgroundColor: step.bg, color: step.accent }}
+              className="w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold mx-auto mb-5"
+              style={{ backgroundColor: "var(--bg-accent-soft)", color: "var(--text-accent)" }}
             >
               {step.num}
             </div>
-            <div>
-              <h3 className="text-base font-semibold mb-1" style={{ color: "var(--text-secondary)" }}>
-                {step.title}
-              </h3>
-              <p className="text-sm leading-relaxed" style={{ color: "var(--text-dim)" }}>
-                {step.desc}
-              </p>
-            </div>
+            <h3 className="text-base font-semibold mb-2" style={{ color: "var(--text-secondary)" }}>
+              {step.title}
+            </h3>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--text-dim)" }}>
+              {step.desc}
+            </p>
           </div>
         ))}
       </div>
@@ -152,64 +157,70 @@ function FeaturesSection() {
     {
       title: "Airdrop",
       desc: "Distribute tokens only to verified wallets. No sybil claims, no bot farming — every recipient is a real person.",
-      accent: "var(--text-accent)",
-      bg: "var(--bg-accent-soft)",
-      icon: (
-        <path d="M21 12a9 9 0 1 1-9-9"/>
-      ),
-      icon2: (
-        <path d="M21 3v6h-6"/>
-      ),
-      icon3: (
-        <path d="M12 7v5l3 3"/>
+      accent: "var(--accent-airdrop)",
+      bg: "var(--accent-airdrop-soft)",
+      svg: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M21 12a9 9 0 1 1-9-9"/>
+          <path d="M21 3v6h-6"/>
+          <path d="M12 7v5l3 3"/>
+        </svg>
       ),
     },
     {
       title: "P2P Trading",
       desc: "Trade assets directly between verified peers. Listings are only visible and tradeable by verified wallets.",
-      accent: "var(--text-blue)",
-      bg: "var(--bg-blue-soft)",
-      icon: (
-        <path d="M7 17l9.2-9.2M17 17V7H7"/>
+      accent: "var(--accent-p2p)",
+      bg: "var(--accent-p2p-soft)",
+      svg: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M7 17l9.2-9.2M17 17V7H7"/>
+        </svg>
       ),
     },
     {
       title: "Governance",
       desc: "Create and vote on ecosystem proposals. One person, one vote — verified identity prevents vote manipulation.",
-      accent: "var(--text-purple)",
-      bg: "var(--bg-purple-soft)",
-      icon: (
-        <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+      accent: "var(--accent-vote)",
+      bg: "var(--accent-vote-soft)",
+      svg: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M9 12l2 2 4-4"/>
+          <path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20z"/>
+        </svg>
       ),
     },
   ]
 
   return (
-    <section className="py-16 md:py-20">
-      <h2 className="text-2xl font-bold text-center mb-4" style={{ color: "var(--text-primary)" }}>
+    <section className="py-20 md:py-24">
+      <div className="flex items-center gap-3 mb-8 justify-center">
+        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
+        <span className="text-xs font-medium uppercase tracking-widest" style={{ color: "var(--text-dim)" }}>Modules</span>
+        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
+      </div>
+
+      <h2 className="text-3xl md:text-4xl font-bold text-center tracking-tight mb-4" style={{ color: "var(--text-primary)" }}>
         Core Modules
       </h2>
-      <p className="text-sm text-center max-w-md mx-auto mb-10" style={{ color: "var(--text-muted)" }}>
+      <p className="text-sm text-center max-w-md mx-auto mb-12" style={{ color: "var(--text-muted)" }}>
         Three powerful dApps that unlock when your wallet is verified
       </p>
+
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {features.map((f) => (
           <div
             key={f.title}
-            className="rounded-xl p-7"
+            className="rounded-xl p-8"
             style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border-card)" }}
           >
-            <div className="w-11 h-11 rounded-xl mb-4 flex items-center justify-center" style={{ backgroundColor: f.bg }}>
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={f.accent} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                {f.icon}
-                {f.icon2}
-                {f.icon3}
-              </svg>
+            <div className="w-12 h-12 rounded-xl mb-5 flex items-center justify-center" style={{ backgroundColor: f.bg, color: f.accent }}>
+              {f.svg}
             </div>
-            <h3 className="text-base font-semibold mb-2" style={{ color: "var(--text-secondary)" }}>
+            <h3 className="text-lg font-semibold mb-3" style={{ color: "var(--text-secondary)" }}>
               {f.title}
             </h3>
-            <p className="text-xs leading-relaxed" style={{ color: "var(--text-dim)" }}>
+            <p className="text-sm leading-relaxed" style={{ color: "var(--text-dim)" }}>
               {f.desc}
             </p>
           </div>
@@ -224,43 +235,73 @@ function BenefitsSection() {
     {
       title: "Sybil Resistance",
       desc: "Every wallet is backed by real-world identity verification via Dojang attestations.",
-      icon: "🛡️",
+      svg: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+        </svg>
+      ),
     },
     {
       title: "GIWA Chain Speed",
       desc: "1-second block times with 200ms Flashblocks preconfirmation for near-instant transactions.",
-      icon: "⚡",
+      svg: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+        </svg>
+      ),
     },
     {
       title: "Composable dApps",
       desc: "Airdrop, P2P, and Governance all use the same verification contract — consistent access control.",
-      icon: "🔗",
+      svg: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+          <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+        </svg>
+      ),
     },
     {
       title: "Transparent Onchain",
       desc: "All verification status is stored onchain and publicly verifiable via the GIWA explorer.",
-      icon: "✅",
+      svg: (
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <polyline points="9 11 12 14 22 4"/>
+          <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/>
+        </svg>
+      ),
     },
   ]
 
   return (
-    <section className="py-16 md:py-20">
-      <h2 className="text-2xl font-bold text-center mb-12" style={{ color: "var(--text-primary)" }}>
+    <section className="py-20 md:py-24">
+      <div className="flex items-center gap-3 mb-8 justify-center">
+        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
+        <span className="text-xs font-medium uppercase tracking-widest" style={{ color: "var(--text-dim)" }}>Why</span>
+        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
+      </div>
+
+      <h2 className="text-3xl md:text-4xl font-bold text-center tracking-tight mb-14" style={{ color: "var(--text-primary)" }}>
         Why GiwaVerify?
       </h2>
-      <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
+
+      <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
         {items.map((item) => (
           <div
             key={item.title}
-            className="rounded-xl p-6 flex items-start gap-4"
+            className="rounded-xl p-7 flex items-start gap-5"
             style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border-card)" }}
           >
-            <span className="text-xl shrink-0 mt-0.5">{item.icon}</span>
+            <div
+              className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0"
+              style={{ backgroundColor: "var(--bg-accent-soft)", color: "var(--text-accent)" }}
+            >
+              {item.svg}
+            </div>
             <div>
-              <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--text-secondary)" }}>
+              <h3 className="text-sm font-semibold mb-1.5" style={{ color: "var(--text-secondary)" }}>
                 {item.title}
               </h3>
-              <p className="text-xs leading-relaxed" style={{ color: "var(--text-dim)" }}>
+              <p className="text-sm leading-relaxed" style={{ color: "var(--text-dim)" }}>
                 {item.desc}
               </p>
             </div>
@@ -273,24 +314,23 @@ function BenefitsSection() {
 
 function CtaSection({ onConnect }) {
   return (
-    <section className="py-16 md:py-20 text-center">
-      <div className="max-w-xl mx-auto rounded-2xl py-12 px-8" style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border-card)" }}>
-        <div className="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: "var(--bg-accent-soft)" }}>
-          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--text-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+    <section className="py-20 md:py-24 text-center">
+      <div className="max-w-lg mx-auto text-center">
+        <div className="w-14 h-14 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: "var(--bg-accent-soft)" }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-accent)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
             <path d="M7 11V7a5 5 0 0110 0v4"/>
           </svg>
         </div>
-        <h2 className="text-lg font-semibold mb-2" style={{ color: "var(--text-primary)" }}>
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4" style={{ color: "var(--text-primary)" }}>
           Ready to get started?
         </h2>
-        <p className="text-sm mb-6" style={{ color: "var(--text-muted)" }}>
+        <p className="text-sm mb-8 max-w-sm mx-auto" style={{ color: "var(--text-muted)" }}>
           Connect your wallet to verify your identity and unlock the GiwaVerify ecosystem.
         </p>
         <button
           onClick={onConnect}
-          className="btn-primary px-6 py-2.5 rounded-xl text-sm font-semibold shadow-lg"
-          style={{ boxShadow: "0 0 24px -4px var(--btn-primary-bg)" }}
+          className="btn-primary px-8 py-3 rounded-xl text-sm font-semibold"
         >
           Connect Wallet
         </button>
@@ -301,7 +341,7 @@ function CtaSection({ onConnect }) {
 
 function FooterSection() {
   return (
-    <footer className="py-8 text-center border-t" style={{ borderColor: "var(--border-header)" }}>
+    <footer className="py-10 text-center border-t" style={{ borderColor: "var(--border-header)" }}>
       <p className="text-xs" style={{ color: "var(--text-dim)" }}>
         Built on <a href="https://giwa.io" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-accent)" }} className="hover:underline">GIWA Chain</a>
         &nbsp;·&nbsp;
@@ -342,16 +382,16 @@ export default function Dashboard() {
 
   if (isConnected && isVerified === false) {
     return (
-      <div className="max-w-xl mx-auto text-center py-20">
-        <div className="w-12 h-12 rounded-xl mx-auto mb-4 flex items-center justify-center" style={{ backgroundColor: "var(--bg-amber-soft)" }}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-amber)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+      <div className="max-w-lg mx-auto text-center py-24">
+        <div className="w-16 h-16 rounded-2xl mx-auto mb-6 flex items-center justify-center" style={{ backgroundColor: "var(--bg-amber-soft)" }}>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-amber)" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
             <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
             <path d="M7 11V7a5 5 0 0110 0v4"/>
           </svg>
         </div>
-        <h2 className="text-base font-medium mb-1" style={{ color: "var(--text-amber)" }}>Unverified Wallet</h2>
-        <p className="text-sm mb-4" style={{ color: "var(--text-muted)" }}>This wallet is not on the verified list.</p>
-        <div className="inline-block px-4 py-2 rounded-lg text-sm" style={{ backgroundColor: "var(--bg-card)", color: "var(--text-secondary)" }}>
+        <h2 className="text-2xl font-bold mb-2" style={{ color: "var(--text-amber)" }}>Unverified Wallet</h2>
+        <p className="text-sm mb-8" style={{ color: "var(--text-muted)" }}>This wallet is not on the verified list.</p>
+        <div className="inline-block px-5 py-2.5 rounded-xl text-sm" style={{ backgroundColor: "var(--bg-card)", color: "var(--text-secondary)", border: "1px solid var(--border-card)" }}>
           Contact the contract owner for access
         </div>
       </div>
@@ -360,10 +400,16 @@ export default function Dashboard() {
 
   if (isConnected && isVerified) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 py-4">
-        <AirdropSection />
-        <P2PSection />
-        <VoteSection />
+      <div className="max-w-6xl mx-auto py-4 space-y-8">
+        <div className="text-center pb-2">
+          <h2 className="text-2xl font-bold tracking-tight" style={{ color: "var(--text-primary)" }}>Dashboard</h2>
+          <p className="text-sm mt-1" style={{ color: "var(--text-muted)" }}>Access your verified-only dApps</p>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <AirdropSection />
+          <P2PSection />
+          <VoteSection />
+        </div>
       </div>
     )
   }

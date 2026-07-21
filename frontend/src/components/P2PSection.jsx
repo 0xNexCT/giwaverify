@@ -27,35 +27,52 @@ export default function P2PSection() {
   }
 
   return (
-    <div className="rounded-xl p-5" style={{ backgroundColor: "var(--bg-card)", borderColor: "var(--border-card)", borderWidth: 1 }}>
-      <div className="flex items-center justify-between mb-4">
-        <h3 style={{ color: "var(--text-secondary)" }} className="text-sm font-medium">P2P Marketplace</h3>
-        <span className="text-xs" style={{ color: "var(--text-dim)" }}>{Number(count ?? 0)} listings</span>
-      </div>
-      <p className="text-xs mb-4" style={{ color: "var(--text-dim)" }}>Trade directly with verified peers.</p>
-      <div className="space-y-2">
-        <input
-          type="number"
-          value={id}
-          onChange={(e) => setId(e.target.value)}
-          placeholder="Listing ID"
-          className="w-full rounded-lg px-3 py-2 text-sm"
-        />
-        <div className="flex gap-2">
+    <div
+      className="rounded-xl card-accent-p2p"
+      style={{ backgroundColor: "var(--bg-card)", borderLeft: "1px solid var(--border-card)", borderRight: "1px solid var(--border-card)", borderBottom: "1px solid var(--border-card)" }}
+    >
+      <div className="p-6">
+        <div className="flex items-center gap-3 mb-4">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ backgroundColor: "var(--accent-p2p-soft)", color: "var(--accent-p2p)" }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M7 17l9.2-9.2M17 17V7H7"/>
+            </svg>
+          </div>
+          <div className="flex-1">
+            <h3 className="text-base font-semibold" style={{ color: "var(--text-primary)" }}>P2P Marketplace</h3>
+            <p className="text-xs mt-0.5" style={{ color: "var(--text-dim)" }}>Trade directly with verified peers</p>
+          </div>
+          <span className="text-xs font-medium px-3 py-1 rounded-lg" style={{ backgroundColor: "var(--accent-p2p-soft)", color: "var(--accent-p2p)" }}>
+            {Number(count ?? 0)} listings
+          </span>
+        </div>
+
+        <div className="space-y-2">
           <input
-            type="text"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            placeholder="Price ETH"
-            className="flex-1 rounded-lg px-3 py-2 text-sm"
+            type="number"
+            value={id}
+            onChange={(e) => setId(e.target.value)}
+            placeholder="Listing ID"
+            className="w-full rounded-lg px-3 py-2.5 text-sm"
+            style={{ borderColor: "var(--border-input)" }}
           />
-          <button
-            onClick={handleBuy}
-            disabled={!id || !price || isPending}
-            className="btn-primary px-4 py-2 rounded-lg text-sm font-medium"
-          >
-            {isPending ? "..." : "Buy"}
-          </button>
+          <div className="flex gap-2">
+            <input
+              type="text"
+              value={price}
+              onChange={(e) => setPrice(e.target.value)}
+              placeholder="Price in ETH"
+              className="flex-1 rounded-lg px-3 py-2.5 text-sm"
+              style={{ borderColor: "var(--border-input)" }}
+            />
+            <button
+              onClick={handleBuy}
+              disabled={!id || !price || isPending}
+              className="btn-accent-p2p px-5 py-2.5 rounded-lg text-sm font-semibold"
+            >
+              {isPending ? "Buying..." : "Buy"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
