@@ -4,7 +4,6 @@ const wallets = [
   {
     id: "metaMask",
     name: "MetaMask",
-    gradient: "from-orange-400 to-yellow-500",
     icon: (
       <svg viewBox="0 0 35 33" fill="none" className="w-7 h-7">
         <path d="M32.958 1L19.814 10.87l2.442-5.8L32.958 1z" fill="#E17726" stroke="#E17726" strokeWidth="0.25"/>
@@ -38,7 +37,6 @@ const wallets = [
   {
     id: "okxWallet",
     name: "OKX Wallet",
-    gradient: "from-blue-500 to-blue-700",
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
         <rect width="40" height="40" rx="10" fill="#1A80F8"/>
@@ -49,7 +47,6 @@ const wallets = [
   {
     id: "rabby",
     name: "Rabby",
-    gradient: "from-green-400 to-emerald-500",
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
         <rect width="40" height="40" rx="8" fill="#48D1A0"/>
@@ -60,7 +57,6 @@ const wallets = [
   {
     id: "phantom",
     name: "Phantom",
-    gradient: "from-purple-400 to-purple-600",
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
         <rect width="40" height="40" rx="8" fill="#AB9FF2"/>
@@ -72,7 +68,6 @@ const wallets = [
   {
     id: "coinbaseWallet",
     name: "Coinbase",
-    gradient: "from-blue-400 to-blue-600",
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
         <rect width="40" height="40" rx="8" fill="#0052FF"/>
@@ -83,7 +78,6 @@ const wallets = [
   {
     id: "walletConnect",
     name: "WalletConnect",
-    gradient: "from-blue-400 to-cyan-400",
     icon: (
       <svg viewBox="0 0 40 40" fill="none" className="w-7 h-7">
         <rect width="40" height="40" rx="8" fill="#3396FF"/>
@@ -104,14 +98,25 @@ export default function WalletModal({ onClose }) {
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" onClick={onClose}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      style={{ backgroundColor: "var(--bg-overlay)" }}
+      onClick={onClose}
+    >
       <div
-        className="bg-[#121214] border border-white/10 rounded-2xl p-6 w-80 shadow-2xl animate-scale"
+        className="rounded-2xl p-6 w-80 shadow-2xl animate-scale"
+        style={{ backgroundColor: "var(--bg-modal)", border: "1px solid var(--border-modal)" }}
         onClick={(e) => e.stopPropagation()}
       >
         <div className="flex items-center justify-between mb-5">
-          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-widest">Connect Wallet</h2>
-          <button onClick={onClose} className="text-gray-600 hover:text-gray-400 transition-colors p-1">
+          <h2 className="text-xs font-semibold uppercase tracking-widest" style={{ color: "var(--text-muted)" }}>Connect Wallet</h2>
+          <button
+            onClick={onClose}
+            className="transition-colors p-1"
+            style={{ color: "var(--text-dim)" }}
+            onMouseEnter={(e) => e.currentTarget.style.color = "var(--text-muted)"}
+            onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-dim)"}
+          >
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round">
               <path d="M18 6L6 18M6 6l12 12"/>
             </svg>
@@ -120,16 +125,27 @@ export default function WalletModal({ onClose }) {
         <div className="grid grid-cols-2 gap-3">
           {wallets.map((w) => {
             const available = connectors.some((c) => c.id === w.id)
+            if (!available) return null
             return (
               <button
                 key={w.id}
                 onClick={() => handleConnect(w.id)}
-                disabled={!available}
-                className={`flex flex-col items-center gap-2 px-4 py-4 rounded-xl text-sm font-medium transition-all border ${
-                  available
-                    ? "bg-white/[0.03] border-white/5 hover:bg-white/[0.06] hover:border-white/10 text-gray-300 hover:text-white"
-                    : "bg-white/[0.01] border-white/5 text-gray-600 cursor-not-allowed opacity-40"
-                }`}
+                className="flex flex-col items-center gap-2 px-4 py-4 rounded-xl text-sm font-medium transition-all border"
+                style={{
+                  backgroundColor: "var(--bg-card)",
+                  borderColor: "var(--border-card)",
+                  color: "var(--text-secondary)",
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "var(--bg-card-hover)"
+                  e.currentTarget.style.borderColor = "var(--border-card-hover)"
+                  e.currentTarget.style.color = "var(--text-primary)"
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "var(--bg-card)"
+                  e.currentTarget.style.borderColor = "var(--border-card)"
+                  e.currentTarget.style.color = "var(--text-secondary)"
+                }}
               >
                 {w.icon}
                 <span className="text-xs">{w.name}</span>
@@ -137,7 +153,7 @@ export default function WalletModal({ onClose }) {
             )
           })}
         </div>
-        <p className="text-xs text-gray-700 text-center mt-5">
+        <p className="text-xs text-center mt-5" style={{ color: "var(--text-dim)" }}>
           New to Web3? Install MetaMask or OKX Wallet
         </p>
       </div>

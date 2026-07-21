@@ -1,23 +1,141 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: 'Inter';
-  src: url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+:root {
+  --bg-page: #0a0a0b;
+  --bg-card: rgba(255, 255, 255, 0.05);
+  --bg-card-hover: rgba(255, 255, 255, 0.08);
+  --bg-input: rgba(255, 255, 255, 0.06);
+  --bg-modal: #121214;
+  --bg-overlay: rgba(0, 0, 0, 0.6);
+  --bg-header: rgba(255, 255, 255, 0.02);
+  --bg-accent-soft: rgba(52, 211, 153, 0.1);
+  --bg-amber-soft: rgba(245, 158, 11, 0.1);
+  --bg-blue-soft: rgba(96, 165, 250, 0.1);
+  --bg-purple-soft: rgba(167, 139, 250, 0.1);
+
+  --border-card: rgba(255, 255, 255, 0.08);
+  --border-card-hover: rgba(255, 255, 255, 0.12);
+  --border-input: rgba(255, 255, 255, 0.1);
+  --border-header: rgba(255, 255, 255, 0.05);
+  --border-modal: rgba(255, 255, 255, 0.1);
+
+  --text-primary: #f3f4f6;
+  --text-secondary: #d1d5db;
+  --text-muted: #9ca3af;
+  --text-dim: #6b7280;
+  --text-input: #d1d5db;
+  --text-accent: #34d399;
+  --text-amber: #f59e0b;
+  --text-blue: #60a5fa;
+  --text-purple: #a78bfa;
+
+  --btn-primary-bg: #10b981;
+  --btn-primary-hover: #34d399;
+  --btn-primary-text: #000000;
+  --btn-primary-disabled-bg: rgba(255, 255, 255, 0.05);
+  --btn-primary-disabled-text: #6b7280;
+
+  --btn-ghost-bg: rgba(255, 255, 255, 0.05);
+  --btn-ghost-hover: rgba(255, 255, 255, 0.1);
+  --btn-ghost-text: #d1d5db;
+  --btn-ghost-disabled-text: #6b7280;
+}
+
+[data-theme="light"] {
+  --bg-page: #f9fafb;
+  --bg-card: #ffffff;
+  --bg-card-hover: #f3f4f6;
+  --bg-input: #f3f4f6;
+  --bg-modal: #ffffff;
+  --bg-overlay: rgba(0, 0, 0, 0.3);
+  --bg-header: #ffffff;
+  --bg-accent-soft: rgba(16, 185, 129, 0.1);
+  --bg-amber-soft: rgba(245, 158, 11, 0.1);
+  --bg-blue-soft: rgba(59, 130, 246, 0.1);
+  --bg-purple-soft: rgba(139, 92, 246, 0.1);
+
+  --border-card: #e5e7eb;
+  --border-card-hover: #d1d5db;
+  --border-input: #d1d5db;
+  --border-header: #e5e7eb;
+  --border-modal: #e5e7eb;
+
+  --text-primary: #111827;
+  --text-secondary: #374151;
+  --text-muted: #6b7280;
+  --text-dim: #9ca3af;
+  --text-input: #374151;
+  --text-accent: #059669;
+  --text-amber: #d97706;
+  --text-blue: #2563eb;
+  --text-purple: #7c3aed;
+
+  --btn-primary-bg: #059669;
+  --btn-primary-hover: #10b981;
+  --btn-primary-text: #ffffff;
+  --btn-primary-disabled-bg: #e5e7eb;
+  --btn-primary-disabled-text: #9ca3af;
+
+  --btn-ghost-bg: #f3f4f6;
+  --btn-ghost-hover: #e5e7eb;
+  --btn-ghost-text: #374151;
+  --btn-ghost-disabled-text: #9ca3af;
 }
 
 body {
   font-family: 'Inter', system-ui, -apple-system, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  transition: background-color 0.25s ease;
 }
 
-input:focus {
+input, textarea {
+  background-color: var(--bg-input);
+  border: 1px solid var(--border-input);
+  color: var(--text-input);
+  transition: border-color 0.18s ease;
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--text-dim);
+}
+
+input:focus, textarea:focus {
+  border-color: var(--text-accent);
   outline: none;
-  ring: none;
 }
 
-button {
-  cursor: pointer;
+.btn-primary {
+  background-color: var(--btn-primary-bg);
+  color: var(--btn-primary-text);
+  transition: background-color 0.18s ease;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--btn-primary-hover);
+}
+
+.btn-primary:disabled {
+  background-color: var(--btn-primary-disabled-bg);
+  color: var(--btn-primary-disabled-text);
+  cursor: not-allowed;
+}
+
+.btn-ghost {
+  background-color: var(--btn-ghost-bg);
+  color: var(--btn-ghost-text);
+  transition: background-color 0.18s ease, color 0.18s ease;
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background-color: var(--btn-ghost-hover);
+}
+
+.btn-ghost:disabled {
+  color: var(--btn-ghost-disabled-text);
+  cursor: not-allowed;
 }
 
 @keyframes fadeIn {

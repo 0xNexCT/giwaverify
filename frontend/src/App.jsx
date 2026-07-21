@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { WagmiProvider, http, createConfig } from "wagmi"
 import { injected, coinbaseWallet, walletConnect } from "wagmi/connectors"
@@ -40,15 +41,26 @@ const wagmiConfig = createConfig({
 })
 
 export default function App() {
+  const [theme, setTheme] = useState(() => {
+    try { return localStorage.getItem("giwaverify-theme") || "dark" } catch { return "dark" }
+  })
+
+  useEffect(() => {
+    document.documentElement.setAttribute("data-theme", theme)
+    try { localStorage.setItem("giwaverify-theme", theme) } catch {}
+  }, [theme])
+
+  function toggleTheme() {
+    setTheme((t) => (t === "dark" ? "light" : "dark"))
+  }
+
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <div className="min-h-screen bg-[#0a0a0b] text-white">
-          <Header />
-          <main className="max-w-5xl mx-auto px-6 py-12 animate-in">
-            <Dashboard />
-          </main>
-        </div>
+        <Header theme={theme} onToggleTheme={toggleTheme} />
+        <main className="max-w-5xl mx-auto px-6 py-12 animate-in">
+          <Dashboard />
+        </main>
       </QueryClientProvider>
     </WagmiProvider>
   )
