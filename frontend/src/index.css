@@ -1,56 +1,56 @@
 @import "tailwindcss";
 
 :root {
-  --bg-page: #0c0c0d;
-  --bg-card: rgba(255, 255, 255, 0.04);
-  --bg-card-hover: rgba(255, 255, 255, 0.07);
-  --bg-input: rgba(255, 255, 255, 0.05);
-  --bg-modal: #141416;
-  --bg-overlay: rgba(0, 0, 0, 0.7);
-  --bg-header: rgba(255, 255, 255, 0.015);
-  --bg-accent-soft: rgba(9, 249, 233, 0.08);
-  --bg-amber-soft: rgba(245, 158, 11, 0.08);
-  --bg-blue-soft: rgba(59, 130, 246, 0.08);
-  --bg-purple-soft: rgba(139, 92, 246, 0.08);
+  --bg-page: #000000;
+  --bg-card: #0a0a0a;
+  --bg-card-hover: #141414;
+  --bg-input: #0a0a0a;
+  --bg-modal: #0a0a0a;
+  --bg-overlay: rgba(0, 0, 0, 0.8);
+  --bg-header: rgba(255, 255, 255, 0.02);
+  --bg-accent-soft: rgba(255, 255, 255, 0.06);
+  --bg-amber-soft: rgba(251, 191, 36, 0.08);
+  --bg-blue-soft: rgba(96, 165, 250, 0.08);
+  --bg-purple-soft: rgba(167, 139, 250, 0.08);
 
   --border-card: rgba(255, 255, 255, 0.06);
   --border-card-hover: rgba(255, 255, 255, 0.1);
   --border-input: rgba(255, 255, 255, 0.08);
   --border-header: rgba(255, 255, 255, 0.04);
-  --border-modal: rgba(255, 255, 255, 0.08);
+  --border-modal: rgba(255, 255, 255, 0.06);
 
-  --text-primary: #f5f5f5;
+  --text-primary: #ffffff;
   --text-secondary: #a3a3a3;
   --text-muted: #737373;
   --text-dim: #525252;
   --text-input: #e5e5e5;
-  --text-accent: #09f9e9;
+  --text-accent: #ffffff;
   --text-amber: #fbbf24;
   --text-blue: #60a5fa;
   --text-purple: #a78bfa;
 
-  --btn-primary-bg: #09f9e9;
-  --btn-primary-hover: #0ad1c4;
-  --btn-primary-text: #050505;
-  --btn-primary-disabled-bg: rgba(255, 255, 255, 0.05);
+  --btn-primary-bg: #ffffff;
+  --btn-primary-hover: #e5e5e5;
+  --btn-primary-text: #000000;
+  --btn-primary-disabled-bg: #141414;
   --btn-primary-disabled-text: #525252;
 
-  --btn-ghost-bg: rgba(255, 255, 255, 0.04);
-  --btn-ghost-hover: rgba(255, 255, 255, 0.07);
+  --btn-ghost-bg: rgba(255, 255, 255, 0.05);
+  --btn-ghost-hover: rgba(255, 255, 255, 0.08);
   --btn-ghost-text: #a3a3a3;
   --btn-ghost-disabled-text: #525252;
 }
 
 [data-theme="light"] {
-  --bg-page: #fafafa;
+  --bg-page: #f5f5f5;
   --bg-card: #ffffff;
-  --bg-card-hover: #f5f5f5;
-  --bg-input: #f5f5f5;
+  --bg-card-hover: #ebebeb;
+  --bg-input: #ebebeb;
   --bg-modal: #ffffff;
-  --bg-overlay: rgba(0, 0, 0, 0.25);
+  --bg-overlay: rgba(0, 0, 0, 0.15);
   --bg-header: #ffffff;
-  --bg-accent-soft: rgba(9, 249, 233, 0.1);
-  --bg-amber-soft: rgba(245, 158, 11, 0.08);
+  --bg-accent-soft: rgba(0, 0, 0, 0.04);
+  --bg-amber-soft: rgba(251, 191, 36, 0.1);
   --bg-blue-soft: rgba(59, 130, 246, 0.08);
   --bg-purple-soft: rgba(139, 92, 246, 0.08);
 
@@ -60,24 +60,24 @@
   --border-header: #e5e5e5;
   --border-modal: #e5e5e5;
 
-  --text-primary: #171717;
+  --text-primary: #000000;
   --text-secondary: #404040;
   --text-muted: #737373;
   --text-dim: #a3a3a3;
   --text-input: #262626;
-  --text-accent: #0ad1c4;
+  --text-accent: #000000;
   --text-amber: #d97706;
   --text-blue: #2563eb;
   --text-purple: #7c3aed;
 
-  --btn-primary-bg: #09f9e9;
-  --btn-primary-hover: #0ad1c4;
-  --btn-primary-text: #050505;
-  --btn-primary-disabled-bg: #e5e5e5;
+  --btn-primary-bg: #000000;
+  --btn-primary-hover: #262626;
+  --btn-primary-text: #ffffff;
+  --btn-primary-disabled-bg: #ebebeb;
   --btn-primary-disabled-text: #a3a3a3;
 
-  --btn-ghost-bg: #f5f5f5;
-  --btn-ghost-hover: #e5e5e5;
+  --btn-ghost-bg: #ebebeb;
+  --btn-ghost-hover: #d4d4d4;
   --btn-ghost-text: #404040;
   --btn-ghost-disabled-text: #a3a3a3;
 }
