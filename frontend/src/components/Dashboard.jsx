@@ -63,10 +63,7 @@ function AboutSection() {
   return (
     <section className="py-20 md:py-24">
       <div className="max-w-4xl mx-auto">
-        <div className="flex items-center gap-3 mb-8">
-          <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
-          <span className="text-xs font-medium uppercase tracking-widest" style={{ color: "var(--text-dim)" }}>About</span>
-        </div>
+        <div className="eyebrow mb-7">About</div>
 
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight leading-tight mb-8" style={{ color: "var(--text-primary)" }}>
           What is GiwaVerify?
@@ -116,33 +113,23 @@ function HowItWorksSection() {
 
   return (
     <section className="py-20 md:py-24">
-      <div className="flex items-center gap-3 mb-8 justify-center">
-        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
-        <span className="text-xs font-medium uppercase tracking-widest" style={{ color: "var(--text-dim)" }}>Process</span>
-        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
-      </div>
+      <div className="eyebrow mb-7 justify-center" style={{ display: "flex" }}>Process</div>
 
       <h2 className="text-3xl md:text-4xl font-bold text-center tracking-tight mb-14" style={{ color: "var(--text-primary)" }}>
         How It Works
       </h2>
 
       <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-        {steps.map((step, i) => (
+        {steps.map((step) => (
           <div
             key={step.num}
-            className="rounded-xl p-7 text-center"
+            className="rounded-xl p-7"
             style={{ backgroundColor: "var(--bg-card)", border: "1px solid var(--border-card)" }}
           >
-            <div
-              className="w-12 h-12 rounded-xl flex items-center justify-center text-lg font-bold mx-auto mb-5"
-              style={{ backgroundColor: "var(--bg-accent-soft)", color: "var(--text-accent)" }}
-            >
-              {step.num}
-            </div>
-            <h3 className="text-base font-semibold mb-2" style={{ color: "var(--text-secondary)" }}>
-              {step.title}
-            </h3>
-            <p className="text-sm leading-relaxed" style={{ color: "var(--text-dim)" }}>
+            <span className="numbered-step mb-3" style={{ display: "block" }}>
+              <span className="num">{step.num}</span> · {step.title}
+            </span>
+            <p className="text-sm leading-relaxed mt-3" style={{ color: "var(--text-dim)" }}>
               {step.desc}
             </p>
           </div>
@@ -194,11 +181,7 @@ function FeaturesSection() {
 
   return (
     <section className="py-20 md:py-24">
-      <div className="flex items-center gap-3 mb-8 justify-center">
-        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
-        <span className="text-xs font-medium uppercase tracking-widest" style={{ color: "var(--text-dim)" }}>Modules</span>
-        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
-      </div>
+      <div className="eyebrow mb-7 justify-center" style={{ display: "flex" }}>Modules</div>
 
       <h2 className="text-3xl md:text-4xl font-bold text-center tracking-tight mb-4" style={{ color: "var(--text-primary)" }}>
         Core Modules
@@ -274,11 +257,7 @@ function BenefitsSection() {
 
   return (
     <section className="py-20 md:py-24">
-      <div className="flex items-center gap-3 mb-8 justify-center">
-        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
-        <span className="text-xs font-medium uppercase tracking-widest" style={{ color: "var(--text-dim)" }}>Why</span>
-        <div className="w-8 h-px" style={{ backgroundColor: "var(--text-dim)" }} />
-      </div>
+      <div className="eyebrow mb-7 justify-center" style={{ display: "flex" }}>Why</div>
 
       <h2 className="text-3xl md:text-4xl font-bold text-center tracking-tight mb-14" style={{ color: "var(--text-primary)" }}>
         Why GiwaVerify?
@@ -342,12 +321,15 @@ function CtaSection({ onConnect }) {
 function FooterSection() {
   return (
     <footer className="py-10 text-center border-t" style={{ borderColor: "var(--border-header)" }}>
-      <p className="text-xs" style={{ color: "var(--text-dim)" }}>
+      <p className="text-xs mb-4" style={{ color: "var(--text-dim)" }}>
         Built on <a href="https://giwa.io" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-accent)" }} className="hover:underline">GIWA Chain</a>
         &nbsp;·&nbsp;
         <a href="https://sepolia-explorer.giwa.io" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-accent)" }} className="hover:underline">Explorer</a>
         &nbsp;·&nbsp;
         <a href="https://docs.giwa.io" target="_blank" rel="noopener noreferrer" style={{ color: "var(--text-accent)" }} className="hover:underline">Docs</a>
+      </p>
+      <p className="text-[0.65rem]" style={{ color: "var(--text-dim)", opacity: 0.55 }}>
+        Unofficial community project — built for GASOK 2026, not affiliated with GIWA or Upbit.
       </p>
     </footer>
   )
