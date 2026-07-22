@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 import { useBalance, useReadContract, useAccount, useDisconnect } from "wagmi"
-import { FAUCET_TOKENS } from "../config"
+import { formatEther } from "viem"
+import { FAUCET_TOKENS, GIWA_CHAIN } from "../config"
 import testTokenAbi from "../abis/TestToken.json"
 
 function TokenRow({ token, address, onRefetch }) {
@@ -12,7 +13,11 @@ function TokenRow({ token, address, onRefetch }) {
     query: { enabled: !!address },
   })
 
-  const bal = raw ? (Number(raw) / 10 ** 18).toLocaleString(undefined, { maximumFractionDigits: 2 }) : "0"
+  const bal = (() => {
+    if (raw === undefined || raw === null) return null
+    const num = Number(raw) / 10 ** 18
+    return Number.isFinite(num) ? num.toLocaleString(undefined, { maximumFractionDigits: 2 }) : null
+  })()
 
   useEffect(() => {
     if (onRefetch) onRefetch(refetch)
@@ -33,7 +38,7 @@ function TokenRow({ token, address, onRefetch }) {
         </div>
       </div>
       <div className="text-sm font-mono" style={{ color: "var(--text-primary)" }}>
-        {isPending ? (
+        {isPending || bal === null ? (
           <span className="inline-block w-16 h-4 rounded animate-pulse" style={{ backgroundColor: "var(--bg-card)" }} />
         ) : (
           bal
@@ -49,15 +54,25 @@ export default function WalletPanel({ open, onClose }) {
   const panelRef = useRef(null)
   const [copied, setCopied] = useState(false)
   const [refreshFns, setRefreshFns] = useState([])
+  const [spinning, setSpinning] = useState(false)
 
-  const { data: nativeBalance, isPending: nativePending } = useBalance({ address })
+  const { data: nativeBalance, isPending: nativePending, refetch: refetchNative } = useBalance({
+    address,
+    chainId: GIWA_CHAIN.id,
+  })
 
   const registerRefetch = useCallback((fn) => {
     setRefreshFns((prev) => (prev.includes(fn) ? prev : [...prev, fn]))
   }, [])
 
+  useEffect(() => {
+    registerRefetch(refetchNative)
+  }, [refetchNative, registerRefetch])
+
   function handleRefresh() {
-    refreshFns.forEach((fn) => fn())
+    setSpinning(true)
+    const results = refreshFns.map((fn) => fn())
+    Promise.allSettled(results).finally(() => setSpinning(false))
   }
 
   function handleCopy() {
@@ -85,9 +100,13 @@ export default function WalletPanel({ open, onClose }) {
     }
   }, [open, onClose])
 
-  const nativeFormatted = nativeBalance
-    ? Number(nativeBalance.formatted).toLocaleString(undefined, { maximumFractionDigits: 4 })
-    : "0"
+  function formatBalance(raw) {
+    if (raw == null) return null
+    const num = Number(raw)
+    return Number.isFinite(num) ? num.toLocaleString(undefined, { maximumFractionDigits: 4 }) : null
+  }
+
+  const nativeFormatted = formatBalance(nativeBalance ? formatEther(nativeBalance.value) : null)
 
   return (
     <>
@@ -109,6 +128,11 @@ export default function WalletPanel({ open, onClose }) {
           boxShadow: "-4px 0 24px rgba(0,0,0,0.12)",
         }}
       >
+        <style>{`
+          @keyframes spin { to { transform: rotate(360deg); } }
+          .refresh-spin { animation: spin 0.6s linear; }
+        `}</style>
+
         {/* header */}
         <div className="flex items-center justify-between px-5 h-16 border-b" style={{ borderColor: "var(--border-header)" }}>
           <span className="text-sm font-medium" style={{ color: "var(--text-primary)" }}>Wallet</span>
@@ -178,7 +202,7 @@ export default function WalletPanel({ open, onClose }) {
             <span className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--text-dim)" }}>Balances</span>
             <button
               onClick={handleRefresh}
-              className="p-1 rounded transition-colors"
+              className={`p-1 rounded transition-colors ${spinning ? "refresh-spin" : ""}`}
               style={{ color: "var(--text-dim)" }}
               onMouseEnter={(e) => e.currentTarget.style.color = "var(--text-secondary)"}
               onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-dim)"}
@@ -203,7 +227,7 @@ export default function WalletPanel({ open, onClose }) {
               <div className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>ETH</div>
             </div>
             <div className="text-sm font-mono" style={{ color: "var(--text-primary)" }}>
-              {nativePending ? (
+              {nativePending || nativeFormatted === null ? (
                 <span className="inline-block w-16 h-4 rounded animate-pulse" style={{ backgroundColor: "var(--bg-card)" }} />
               ) : (
                 nativeFormatted
@@ -219,7 +243,7 @@ export default function WalletPanel({ open, onClose }) {
           </div>
 
           {/* empty state */}
-          {!nativePending && Number(nativeFormatted) === 0 && (
+          {!nativePending && nativeFormatted === "0" && (
             <div className="text-center py-10">
               <svg
                 className="mx-auto mb-3"
