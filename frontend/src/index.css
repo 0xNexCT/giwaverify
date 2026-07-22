@@ -11,8 +11,8 @@
   --bg-header: rgba(255, 255, 255, 0.02);
   --bg-accent-soft: rgba(255, 255, 255, 0.06);
 
-  --border-card: rgba(255, 255, 255, 0.06);
-  --border-card-hover: rgba(255, 255, 255, 0.1);
+  --border-card: rgba(255, 255, 255, 0.12);
+  --border-card-hover: rgba(255, 255, 255, 0.18);
   --border-input: rgba(255, 255, 255, 0.08);
   --border-header: rgba(255, 255, 255, 0.04);
   --border-modal: rgba(255, 255, 255, 0.06);
@@ -113,6 +113,16 @@ body {
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--text-dim); border-radius: 3px; }
 
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
 input, textarea {
   background-color: var(--bg-input);
   border: 1px solid var(--border-input);
@@ -161,6 +171,16 @@ input:focus, textarea:focus {
   cursor: not-allowed;
 }
 
+.btn-accent-airdrop,
+.btn-accent-faucet,
+.btn-accent-p2p,
+.btn-accent-vote-for,
+.btn-accent-vote-against,
+.btn-primary,
+.btn-ghost {
+  min-height: 44px;
+}
+
 .card-accent-airdrop,
 .card-accent-faucet {
   border-top: 1px solid var(--accent-faucet);
@@ -170,6 +190,14 @@ input:focus, textarea:focus {
 }
 .card-accent-vote {
   border-top: 1px solid var(--accent-vote);
+}
+
+.card {
+  box-shadow: 0 0 0 1px rgba(255,255,255,0.04), 0 8px 24px rgba(0,0,0,0.4);
+}
+
+[data-theme="light"] .card {
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
 }
 
 .btn-accent-airdrop,
@@ -238,12 +266,6 @@ input:focus, textarea:focus {
   align-items: center;
   gap: 0.25em;
   user-select: none;
-}
-.eyebrow::before {
-  content: "//";
-  opacity: 0.35;
-  font-size: 0.6rem;
-  margin-top: 0.05em;
 }
 
 .numbered-step {

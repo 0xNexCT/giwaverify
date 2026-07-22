@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { useWriteContract, useReadContract, useChainId } from "wagmi"
+import { useWriteContract, useReadContract } from "wagmi"
 import { parseEther } from "viem"
 import { CONTRACTS, GIWA_CHAIN } from "../config"
 import GiwaP2PAbi from "../abis/GiwaP2P.json"
@@ -34,12 +34,11 @@ async function ensureChain() {
   }
 }
 
-export default function P2PSection() {
+export default function P2PSection({ isConnected, isVerified, onConnectRequest }) {
   const [id, setId] = useState("")
   const [price, setPrice] = useState("")
   const [switchStatus, setSwitchStatus] = useState("idle")
   const { writeContract, isPending } = useWriteContract()
-  const chainId = useChainId()
 
   const { data: count } = useReadContract({
     address: CONTRACTS.p2p,
@@ -51,7 +50,7 @@ export default function P2PSection() {
     if (!id || !price) return
     setSwitchStatus("idle")
 
-    if (chainId !== GIWA_CHAIN.id) {
+    if (window.ethereum && Number(window.ethereum.chainId) !== GIWA_CHAIN.id) {
       setSwitchStatus("switching")
       const ok = await ensureChain()
       if (!ok) { setSwitchStatus("error"); return }
@@ -71,50 +70,75 @@ export default function P2PSection() {
 
   return (
     <div
-      className="rounded-xl card-accent-p2p"
+      className="rounded-xl card card-accent-p2p"
       style={{ backgroundColor: "var(--bg-card)", borderLeft: "1px solid var(--border-card)", borderRight: "1px solid var(--border-card)", borderBottom: "1px solid var(--border-card)" }}
     >
-      <div className="p-6 flex flex-col gap-5">
+      <div className="p-7 flex flex-col gap-6">
         <div className="flex items-center gap-3 min-w-0">
-          <div className="w-10 h-10 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--accent-p2p-soft)", color: "var(--accent-p2p)" }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0" style={{ backgroundColor: "var(--accent-p2p-soft)", color: "var(--accent-p2p)" }}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M7 17l9.2-9.2M17 17V7H7"/>
             </svg>
           </div>
           <div className="flex-1 min-w-0">
-            <h3 className="text-base font-semibold truncate" style={{ color: "var(--text-primary)" }}>P2P Marketplace</h3>
-            <p className="text-xs mt-0.5 truncate" style={{ color: "var(--text-secondary)" }}>Trade directly with verified peers</p>
+            <h3 className="text-lg font-semibold truncate" style={{ color: "var(--text-primary)" }}>P2P Marketplace</h3>
+            <p className="text-sm mt-0.5 truncate" style={{ color: "var(--text-secondary)" }}>Trade directly with verified peers</p>
           </div>
-          <span className="shrink-0 whitespace-nowrap text-xs font-medium px-3 py-1 rounded-lg" style={{ backgroundColor: "var(--accent-p2p-soft)", color: "var(--accent-p2p)" }}>
+          <span className="shrink-0 whitespace-nowrap text-sm font-medium px-4 py-1.5 rounded-lg" style={{ backgroundColor: "var(--accent-p2p-soft)", color: "var(--accent-p2p)" }}>
             {total} {total === 1 ? "listing" : "listings"}
           </span>
         </div>
 
-        <div className="space-y-2">
+        <div className="space-y-3">
           <input
             type="number"
             value={id}
             onChange={(e) => setId(e.target.value)}
             placeholder="Listing ID"
-            className="w-full rounded-lg px-3 py-2.5 text-sm"
+            className="w-full rounded-lg px-4 py-3 text-base"
             style={{ borderColor: "var(--border-input)" }}
           />
-          <div className="flex gap-2">
+          <div className="flex gap-3">
             <input
               type="text"
               value={price}
               onChange={(e) => setPrice(e.target.value)}
               placeholder="Price in ETH"
-              className="flex-1 rounded-lg px-3 py-2.5 text-sm"
+              className="flex-1 rounded-lg px-4 py-3 text-base"
               style={{ borderColor: "var(--border-input)" }}
             />
-            <button
-              onClick={handleBuy}
-              disabled={!id || !price || isPending || switchStatus === "switching"}
-              className="btn-accent-p2p px-5 py-2.5 rounded-lg text-sm font-semibold shrink-0"
-            >
-              {switchStatus === "switching" ? "Switching..." : isPending ? "Buying..." : "Buy"}
-            </button>
+            {(() => {
+              if (!isConnected) {
+                return (
+                  <button onClick={onConnectRequest} className="btn-accent-p2p px-6 py-3 rounded-lg text-base font-semibold shrink-0">
+                    Connect Wallet
+                  </button>
+                )
+              }
+              if (isVerified === false) {
+                return (
+                  <div className="px-4 py-3 rounded-lg text-sm shrink-0 flex items-center" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-amber)" }}>
+                    Not verified
+                  </div>
+                )
+              }
+              if (isVerified === undefined) {
+                return (
+                  <div className="px-4 py-3 rounded-lg text-sm shrink-0 flex items-center" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-muted)" }}>
+                    Verifying...
+                  </div>
+                )
+              }
+              return (
+                <button
+                  onClick={handleBuy}
+                  disabled={!id || !price || isPending || switchStatus === "switching"}
+                  className="btn-accent-p2p px-6 py-3 rounded-lg text-base font-semibold shrink-0"
+                >
+                  {switchStatus === "switching" ? "Switching..." : isPending ? "Buying..." : "Buy"}
+                </button>
+              )
+            })()}
           </div>
         </div>
 
@@ -132,7 +156,7 @@ export default function P2PSection() {
                 <path d="M7 17l9.2-9.2M17 17V7H7"/>
               </svg>
             </div>
-            <p className="text-xs" style={{ color: "var(--text-secondary)" }}>No listings yet</p>
+            <p className="text-sm" style={{ color: "var(--text-secondary)" }}>No listings yet</p>
             <p className="text-[0.65rem] mt-0.5" style={{ color: "var(--text-dim)" }}>New trades will appear here</p>
           </div>
         )}

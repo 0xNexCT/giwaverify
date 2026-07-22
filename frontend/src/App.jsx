@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react"
+import { BrowserRouter, Routes, Route } from "react-router-dom"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { WagmiProvider, http, createConfig } from "wagmi"
 import { injected, coinbaseWallet, walletConnect } from "wagmi/connectors"
 import { GIWA_CHAIN, WALLETCONNECT_PROJECT_ID } from "./config"
 import Header from "./components/Header"
-import Dashboard from "./components/Dashboard"
+import WalletModal from "./components/WalletModal"
+import Home from "./pages/Home"
+import FaucetPage from "./pages/FaucetPage"
+import SwapPage from "./pages/SwapPage"
+import GovernancePage from "./pages/GovernancePage"
 
 function detectProvider(window, flag) {
   if (typeof window === "undefined") return undefined
@@ -44,6 +49,8 @@ export default function App() {
   const [theme, setTheme] = useState(() => {
     try { return localStorage.getItem("giwaverify-theme") || "dark" } catch { return "dark" }
   })
+  const [showModal, setShowModal] = useState(false)
+  const onConnectRequest = () => setShowModal(true)
 
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme)
@@ -57,10 +64,18 @@ export default function App() {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <Header theme={theme} onToggleTheme={toggleTheme} />
-        <main className="px-6 md:px-12 lg:px-20 py-12 animate-in">
-          <Dashboard />
-        </main>
+        <BrowserRouter>
+          <Header theme={theme} onToggleTheme={toggleTheme} onConnectRequest={onConnectRequest} />
+          <main className="px-6 md:px-12 lg:px-20 py-12 animate-in">
+            <Routes>
+              <Route path="/" element={<Home onConnectRequest={onConnectRequest} />} />
+              <Route path="/faucet" element={<FaucetPage onConnectRequest={onConnectRequest} />} />
+              <Route path="/swap" element={<SwapPage onConnectRequest={onConnectRequest} />} />
+              <Route path="/governance" element={<GovernancePage onConnectRequest={onConnectRequest} />} />
+            </Routes>
+          </main>
+          {showModal && <WalletModal onClose={() => setShowModal(false)} />}
+        </BrowserRouter>
       </QueryClientProvider>
     </WagmiProvider>
   )

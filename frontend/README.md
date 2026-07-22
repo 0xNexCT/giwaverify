@@ -1,16 +1,52 @@
-# React + Vite
+# GiwaVerify
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+**KYC-gated dApp ecosystem on GIWA Chain.**
 
-Currently, two official plugins are available:
+GiwaVerify is a multi-page public web application that provides a verification layer for the GIWA L2 ecosystem. Built for the GASOK 2026 hackathon.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Public by Default, Verified by Design
 
-## React Compiler
+- **Anyone can browse** the landing page, Faucet, P2P Marketplace, and Governance pages.
+- **Only write actions** (claim tokens, buy listings, create proposals, vote) require a connected wallet with a valid Dojang attestation.
+- If your wallet is not connected, actionable buttons prompt you to connect.
+- If your wallet is connected but not KYC-verified, a clear message explains the requirement.
+- If your wallet is connected and verified, full functionality is unlocked.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Routes
 
-## Expanding the Oxlint configuration
+| Route | Page |
+|---|---|
+| `/` | Home — landing with Hero, About, Features, Benefits, CTA |
+| `/faucet` | Faucet — claim test tokens |
+| `/p2p` | P2P Marketplace — trade with verified peers |
+| `/governance` | Governance — create proposals and vote |
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+## Stack
+
+- **React 19** + **Vite 8**
+- **react-router-dom** (BrowserRouter with catch-all rewrite for SPA)
+- **wagmi** + **viem** — wallet connection and contract interaction
+- **Tailwind CSS** — styling
+- **Vercel** — hosting
+
+## Smart Contracts (GIWA Sepolia)
+
+| Contract | Address |
+|---|---|
+| DemoVerifier | `0x7893e1AcaeEDADFC4fa4a88e9E83a65e4C5BF19e` |
+| Faucet | `0xE7CC5F382B78F2b70f924C10a4bd2aDA6C45dBEf` |
+| P2P | `0x071F8A30A75dC3d586Fe6092Ac028AD283475f0a` |
+| Governance | `0xD0942a76ABA00f7A1988F4EEE48d7ab59Ddc6AC5` |
+
+## Development
+
+```bash
+npm install
+npm run dev
+```
+
+Build for production:
+
+```bash
+npm run build
+```
