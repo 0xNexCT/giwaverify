@@ -2,36 +2,43 @@ pragma solidity ^0.8.28;
 
 import "forge-std/Script.sol";
 import "../src/GiwaSwap.sol";
-import "@openzeppelin/token/ERC20/IERC20.sol";
+import "../src/GiwaToken.sol";
 
 contract AddLiquidityScript is Script {
     function run() external {
         address deployer = 0x84C29FB8b41F229aD09F4d68f84D676A28Dc4a3a;
-
         address swapAddr = 0x5095Bff088BcECf56476DcEAAE45c52351b6EF2B;
-        GiwaSwap swap = GiwaSwap(swapAddr);
 
         address[5] memory tokens = [
-            0x05E894cE2C176Dbc30176626efa24850aF2af0e2, // GVA
-            0x00E8F81208A33BF516cD7Dd46e7597dFB40F5a25, // GVB
-            0x263a171641882Db6b48210E1ea477DB3D1d34509, // GVC
-            0x82868dA66735FCD28185b9BEFa9fF2AeE4BA3FB8, // GVD
-            0xEEd497B085113e8C3FC563935582a72F90BdE528  // GVE
+            0xaEb7B16e9Fd7DbB7C815f102E3Ec9d44d4358887,
+            0x7c9D5163EABb67417107A0a0e3DF0397A1ad3D03,
+            0xE9D91031B2c330fAF5D6f1cd11981B06DC208A6e,
+            0x52d57B37F0E5C9fEce966BC47ed0Ca2E7Cf78673,
+            0x58C5c8641450609275F38376F614cf328dB49df0
         ];
 
-        uint256 liquidityPerPool = 100_000 * 10**18;
+        uint256 amount = 100_000 * 10**18;
 
         vm.startBroadcast(deployer);
 
         for (uint256 i = 0; i < 5; i++) {
-            for (uint256 j = i + 1; j < 5; j++) {
-                IERC20(tokens[i]).approve(address(swap), liquidityPerPool);
-                IERC20(tokens[j]).approve(address(swap), liquidityPerPool);
-                swap.addLiquidity(tokens[i], tokens[j], liquidityPerPool, liquidityPerPool);
+            if (GiwaToken(tokens[i]).balanceOf(deployer) < amount) {
+                GiwaToken(tokens[i]).mint(deployer, amount);
             }
+            IERC20(tokens[i]).approve(swapAddr, amount);
         }
 
-        console.log("Added %e liquidity to all 10 pools", liquidityPerPool);
+        // Add liquidity for GVA-GVB
+        GiwaSwap(swapAddr).addLiquidity(tokens[0], tokens[1], amount, amount);
+        console.log("Liquidity added: GVA-GVB = 100K each");
+
+        // Add liquidity for GVA-GVC
+        GiwaSwap(swapAddr).addLiquidity(tokens[0], tokens[2], amount, amount);
+        console.log("Liquidity added: GVA-GVC = 100K each");
+
+        // Add liquidity for GVB-GVC
+        GiwaSwap(swapAddr).addLiquidity(tokens[1], tokens[2], amount, amount);
+        console.log("Liquidity added: GVB-GVC = 100K each");
 
         vm.stopBroadcast();
     }

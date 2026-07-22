@@ -80,6 +80,7 @@ export default function SwapSection({ isConnected, isVerified, onConnectRequest 
       setSwapStep("idle")
       setAmountIn("")
       setDebouncedAmount("")
+      Promise.all([refetchAllowance(), refetchFromBalance(), refetchReserves()])
     }, 2000)
     return () => clearTimeout(t)
   }, [swapStep])
@@ -120,7 +121,7 @@ export default function SwapSection({ isConnected, isVerified, onConnectRequest 
     query: { enabled: !!address && !!CONTRACTS.swap },
   })
 
-  const { data: fromBalance } = useReadContract({
+  const { data: fromBalance, refetch: refetchFromBalance } = useReadContract({
     address: fromToken.address,
     abi: ERC20_FULL_ABI,
     functionName: "balanceOf",
@@ -128,7 +129,7 @@ export default function SwapSection({ isConnected, isVerified, onConnectRequest 
     query: { enabled: !!address },
   })
 
-  const { data: reserves } = useReadContract({
+  const { data: reserves, refetch: refetchReserves } = useReadContract({
     address: CONTRACTS.swap,
     abi: GiwaSwapAbi,
     functionName: "getReserves",
@@ -209,13 +210,16 @@ export default function SwapSection({ isConnected, isVerified, onConnectRequest 
   async function doSwap() {
     setSwapStep("swapping")
     try {
-      await writeContractAsync({
+      const hash = await writeContractAsync({
         address: CONTRACTS.swap,
         abi: GiwaSwapAbi,
         functionName: "swap",
         args: [fromToken.address, toToken.address, parsedIn, minAmountOut],
         ...gasParams,
       })
+      await waitForTransactionReceipt(wagmiConfig, { hash })
+      await Promise.all([refetchAllowance(), refetchFromBalance(), refetchReserves()])
+      await new Promise((r) => setTimeout(r, 3000))
       setSwapStep("success")
     } catch {
       setSwapStep("idle")

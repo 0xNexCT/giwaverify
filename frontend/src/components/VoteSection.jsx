@@ -402,9 +402,9 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
                           </button>
                         </div>
                       )}
-                      {!ended && userVoted && (
+                      {!ended && userVoted === true && (
                         <span className="text-xs font-medium px-3 py-1.5 rounded-lg" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-accent)" }}>
-                          You voted: {votedSupport ? "Approve" : "Reject"}
+                          You voted: Approve
                         </span>
                       )}
                       {ended && (
@@ -529,9 +529,9 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
                   )}
                   {isConnected && isVerified === true && (
                     <>
-                      {votedMap[selectedProposal.id] !== undefined ? (
+                      {votedMap[selectedProposal.id] === true ? (
                         <div className="flex-1 py-3 rounded-lg text-sm text-center font-medium" style={{ backgroundColor: "var(--bg-accent-soft)", color: "var(--text-accent)" }}>
-                          You voted: {votedMap[selectedProposal.id] ? "Approve" : "Reject"}
+                          You voted: Approve
                         </div>
                       ) : (
                         <>
