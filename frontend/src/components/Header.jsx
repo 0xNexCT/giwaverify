@@ -1,14 +1,18 @@
-import { useState } from "react"
+import { useState, useCallback } from "react"
 import { NavLink } from "react-router-dom"
 import { useAccount, useDisconnect } from "wagmi"
 import WalletModal from "./WalletModal"
+import WalletPanel from "./WalletPanel"
 
 export default function Header({ theme, onToggleTheme, onConnectRequest }) {
   const { address, isConnected } = useAccount()
   const { disconnect } = useDisconnect()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const [panelOpen, setPanelOpen] = useState(false)
+  const togglePanel = useCallback(() => setPanelOpen((v) => !v), [])
+  const closePanel = useCallback(() => setPanelOpen(false), [])
 
-  return (
+  return <>
     <header className="border-b backdrop-blur-sm sticky top-0 z-40" style={{ borderColor: "var(--border-header)", backgroundColor: "var(--bg-header)" }}>
       <div className="px-6 md:px-12 lg:px-20 h-16 flex items-center justify-between">
         <div className="flex items-center gap-6">
@@ -82,7 +86,7 @@ export default function Header({ theme, onToggleTheme, onConnectRequest }) {
             aria-checked={theme === "dark"}
             aria-label="Toggle theme"
             className="relative rounded-full shrink-0 transition-all duration-200 ease-in-out focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline focus-visible:outline-[var(--text-accent)]"
-            style={{ width: 68, height: 34, backgroundColor: theme === "dark" ? "#2a2a2e" : "#e8e8ec" }}
+            style={{ width: 68, height: 34, backgroundColor: theme === "dark" ? "#2a2a2e" : "#d4d4d8" }}
           >
             {/* faint inactive icon on the track */}
             <span
@@ -90,12 +94,12 @@ export default function Header({ theme, onToggleTheme, onConnectRequest }) {
               style={{ [theme === "dark" ? "left" : "right"]: 8 }}
             >
               {theme === "dark" ? (
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.4">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.7">
                   <circle cx="12" cy="12" r="5"/>
                   <path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>
                 </svg>
               ) : (
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#888888" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.4">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#71717a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" opacity="0.7">
                   <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
                 </svg>
               )}
@@ -127,20 +131,31 @@ export default function Header({ theme, onToggleTheme, onConnectRequest }) {
 
           {isConnected ? (
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-2 px-4 py-2 rounded-lg" style={{ backgroundColor: "var(--bg-card)" }}>
+              <button
+                onClick={togglePanel}
+                className="wallet-trigger flex items-center gap-2 px-4 py-2 rounded-lg transition-all duration-150"
+                style={{ backgroundColor: "var(--bg-card)" }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "var(--bg-card-hover)"}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "var(--bg-card)"}
+              >
                 <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "var(--text-accent)" }} />
                 <span className="text-base font-mono" style={{ color: "var(--text-muted)" }}>
                   {address.slice(0, 4)}...{address.slice(-3)}
                 </span>
-              </div>
+              </button>
               <button
                 onClick={disconnect}
-                className="text-base transition-colors font-medium"
-                style={{ color: "var(--text-muted)" }}
-                onMouseEnter={(e) => e.currentTarget.style.color = "var(--text-secondary)"}
-                onMouseLeave={(e) => e.currentTarget.style.color = "var(--text-muted)"}
+                aria-label="Disconnect wallet"
+                title="Disconnect wallet"
+                className="flex items-center justify-center rounded-lg transition-all duration-150"
+                style={{ width: 36, height: 36, color: "var(--text-secondary)", backgroundColor: "transparent" }}
+                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--bg-card)"; e.currentTarget.style.color = "#ef4444" }}
+                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "var(--text-secondary)" }}
               >
-                Disconnect
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/>
+                  <line x1="12" y1="2" x2="12" y2="12"/>
+                </svg>
               </button>
             </div>
           ) : (
@@ -185,5 +200,6 @@ export default function Header({ theme, onToggleTheme, onConnectRequest }) {
         </div>
       )}
     </header>
-  )
+    <WalletPanel open={panelOpen} onClose={closePanel} />
+    </>
 }
