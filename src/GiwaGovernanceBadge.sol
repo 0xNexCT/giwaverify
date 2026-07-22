@@ -1,9 +1,9 @@
 pragma solidity ^0.8.28;
 
 import "@openzeppelin/token/ERC721/ERC721.sol";
-import "@openzeppelin/access/Ownable.sol";
+import "@openzeppelin/access/Ownable2Step.sol";
 
-contract GiwaGovernanceBadge is ERC721, Ownable {
+contract GiwaGovernanceBadge is ERC721, Ownable2Step {
     address public minter;
     uint256 private _nextTokenId;
 
@@ -31,7 +31,7 @@ contract GiwaGovernanceBadge is ERC721, Ownable {
     }
 
     function _update(address to, uint256 tokenId, address auth) internal override returns (address) {
-        if (_ownerOf(tokenId) != address(0) && to != address(0)) revert Soulbound();
+        if (_ownerOf(tokenId) != address(0)) revert Soulbound();
         return super._update(to, tokenId, auth);
     }
 

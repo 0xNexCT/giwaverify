@@ -11,7 +11,9 @@ contract GiwaP2P {
     DojangAttesterId public attesterId;
     address public owner;
 
-    enum ListingStatus { Active, Filled, Cancelled }
+    uint256 public constant LISTING_DURATION = 30 days;
+
+    enum ListingStatus { Active, Filled, Cancelled, Expired }
 
     struct Listing {
         uint256 id;
@@ -21,15 +23,22 @@ contract GiwaP2P {
         bool isERC721;
         uint256 amount;
         uint256 price;
+        uint256 deadline;
         ListingStatus status;
     }
 
     uint256 public listingCount;
     mapping(uint256 => Listing) public listings;
 
-    event Listed(uint256 indexed id, address indexed seller, address indexed token, uint256 amount, uint256 price);
+    event Listed(uint256 indexed id, address indexed seller, address indexed token, uint256 amount, uint256 price, uint256 deadline);
     event Bought(uint256 indexed id, address indexed buyer, address indexed seller);
     event Cancelled(uint256 indexed id);
+    event ListingExpired(uint256 indexed id);
+
+    modifier onlyVerified() {
+        require(verifier.isVerified(msg.sender, attesterId), "Not verified");
+        _;
+    }
 
     constructor(address verifier_, DojangAttesterId attesterId_) {
         require(verifier_ != address(0), "Invalid verifier");
@@ -38,9 +47,10 @@ contract GiwaP2P {
         owner = msg.sender;
     }
 
-    modifier onlyVerified() {
-        require(verifier.isVerified(msg.sender, attesterId), "Not verified");
-        _;
+    function transferOwnership(address newOwner) external {
+        require(msg.sender == owner, "Not owner");
+        require(newOwner != address(0), "Invalid owner");
+        owner = newOwner;
     }
 
     function list(
@@ -63,6 +73,7 @@ contract GiwaP2P {
             isERC721: isERC721,
             amount: amount,
             price: price,
+            deadline: block.timestamp + LISTING_DURATION,
             status: ListingStatus.Active
         });
 
@@ -70,19 +81,21 @@ contract GiwaP2P {
             IERC721Minimal(token).transferFrom(msg.sender, address(this), tokenId);
         }
 
-        emit Listed(listingCount, msg.sender, token, amount, price);
+        emit Listed(listingCount, msg.sender, token, amount, price, block.timestamp + LISTING_DURATION);
         return listingCount;
     }
 
     function buy(uint256 listingId) external payable onlyVerified {
         Listing storage listing = listings[listingId];
         require(listing.status == ListingStatus.Active, "Not active");
+        require(block.timestamp <= listing.deadline, "Listing expired");
         require(msg.value >= listing.price, "Insufficient payment");
         require(msg.sender != listing.seller, "Cannot buy own listing");
 
         listing.status = ListingStatus.Filled;
 
-        payable(listing.seller).transfer(listing.price);
+        (bool sent, ) = payable(listing.seller).call{value: listing.price}("");
+        require(sent, "Payment failed");
 
         if (listing.isERC721) {
             IERC721Minimal(listing.token).transferFrom(address(this), msg.sender, listing.tokenId);
@@ -90,7 +103,8 @@ contract GiwaP2P {
 
         uint256 excess = msg.value - listing.price;
         if (excess > 0) {
-            payable(msg.sender).transfer(excess);
+            (bool refunded, ) = payable(msg.sender).call{value: excess}("");
+            require(refunded, "Refund failed");
         }
 
         emit Bought(listingId, msg.sender, listing.seller);
@@ -108,5 +122,19 @@ contract GiwaP2P {
         }
 
         emit Cancelled(listingId);
+    }
+
+    function cancelExpired(uint256 listingId) external {
+        Listing storage listing = listings[listingId];
+        require(listing.status == ListingStatus.Active, "Not active");
+        require(block.timestamp > listing.deadline, "Not expired yet");
+
+        listing.status = ListingStatus.Expired;
+
+        if (listing.isERC721) {
+            IERC721Minimal(listing.token).transferFrom(address(this), listing.seller, listing.tokenId);
+        }
+
+        emit ListingExpired(listingId);
     }
 }

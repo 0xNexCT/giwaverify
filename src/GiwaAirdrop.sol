@@ -3,11 +3,14 @@ pragma solidity ^0.8.28;
 import "./Interfaces.sol";
 import "@openzeppelin/token/ERC20/IERC20.sol";
 import "@openzeppelin/token/ERC721/IERC721.sol";
+import "@openzeppelin/token/ERC20/utils/SafeERC20.sol";
+import "@openzeppelin/access/Ownable2Step.sol";
 
-contract GiwaAirdrop {
+contract GiwaAirdrop is Ownable2Step {
+    using SafeERC20 for IERC20;
+
     IVerifier public verifier;
     DojangAttesterId public attesterId;
-    address public owner;
 
     struct Airdrop {
         address token;
@@ -26,11 +29,10 @@ contract GiwaAirdrop {
     event Claimed(uint256 indexed id, address indexed user, uint256 amount);
     event AirdropClosed(uint256 indexed id);
 
-    constructor(address verifier_, DojangAttesterId attesterId_) {
+    constructor(address verifier_, DojangAttesterId attesterId_) Ownable(msg.sender) {
         require(verifier_ != address(0), "Invalid verifier");
         verifier = IVerifier(verifier_);
         attesterId = attesterId_;
-        owner = msg.sender;
     }
 
     function createAirdrop(
@@ -38,8 +40,7 @@ contract GiwaAirdrop {
         bool isERC721,
         uint256 amountPerClaim,
         uint256 totalAllocated
-    ) external returns (uint256) {
-        require(msg.sender == owner, "Not owner");
+    ) external onlyOwner returns (uint256) {
         require(token != address(0), "Invalid token");
         require(amountPerClaim > 0, "Zero amount");
         require(totalAllocated > 0, "Zero total");
@@ -55,7 +56,9 @@ contract GiwaAirdrop {
         });
 
         if (!isERC721) {
-            IERC20(token).transferFrom(msg.sender, address(this), totalAllocated);
+            IERC20(token).safeTransferFrom(msg.sender, address(this), totalAllocated);
+        } else {
+            IERC721(token).transferFrom(msg.sender, address(this), amountPerClaim);
         }
 
         emit AirdropCreated(airdropCount, token, amountPerClaim, totalAllocated);
@@ -73,16 +76,15 @@ contract GiwaAirdrop {
         drop.claimed += drop.amountPerClaim;
 
         if (drop.isERC721) {
-            IERC721(drop.token).transferFrom(address(this), msg.sender, drop.amountPerClaim);
+            IERC721(drop.token).safeTransferFrom(address(this), msg.sender, drop.amountPerClaim);
         } else {
-            IERC20(drop.token).transfer(msg.sender, drop.amountPerClaim);
+            IERC20(drop.token).safeTransfer(msg.sender, drop.amountPerClaim);
         }
 
         emit Claimed(airdropId, msg.sender, drop.amountPerClaim);
     }
 
-    function closeAirdrop(uint256 airdropId) external {
-        require(msg.sender == owner, "Not owner");
+    function closeAirdrop(uint256 airdropId) external onlyOwner {
         airdrops[airdropId].active = false;
         emit AirdropClosed(airdropId);
     }

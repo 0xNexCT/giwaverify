@@ -1,9 +1,9 @@
 pragma solidity ^0.8.28;
 
 import "@openzeppelin/token/ERC20/ERC20.sol";
-import "@openzeppelin/access/Ownable.sol";
+import "@openzeppelin/access/Ownable2Step.sol";
 
-contract GVF is ERC20, Ownable {
+contract GVF is ERC20, Ownable2Step {
     address public minter;
 
     error NotMinter();

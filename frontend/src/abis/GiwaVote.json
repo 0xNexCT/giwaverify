@@ -1,1 +1,757 @@
-[{"type": "constructor", "inputs": [{"name": "verifier_", "type": "address", "internalType": "address"}, {"name": "attesterId_", "type": "bytes32", "internalType": "DojangAttesterId"}], "stateMutability": "nonpayable"}, {"type": "function", "name": "GVF_PER_VOTE", "inputs": [], "outputs": [{"name": "", "type": "uint256", "internalType": "uint256"}], "stateMutability": "view"}, {"type": "function", "name": "attesterId", "inputs": [], "outputs": [{"name": "", "type": "bytes32", "internalType": "DojangAttesterId"}], "stateMutability": "view"}, {"type": "function", "name": "badge", "inputs": [], "outputs": [{"name": "", "type": "address", "internalType": "contract GiwaGovernanceBadge"}], "stateMutability": "view"}, {"type": "function", "name": "createProposal", "inputs": [{"name": "title", "type": "string", "internalType": "string"}, {"name": "description", "type": "string", "internalType": "string"}], "outputs": [], "stateMutability": "nonpayable"}, {"type": "function", "name": "getProposal", "inputs": [{"name": "id", "type": "uint256", "internalType": "uint256"}], "outputs": [{"name": "", "type": "tuple", "internalType": "struct GiwaVote.Proposal", "components": [{"name": "id", "type": "uint256", "internalType": "uint256"}, {"name": "proposer", "type": "address", "internalType": "address"}, {"name": "title", "type": "string", "internalType": "string"}, {"name": "description", "type": "string", "internalType": "string"}, {"name": "creationTime", "type": "uint256", "internalType": "uint256"}, {"name": "deadline", "type": "uint256", "internalType": "uint256"}, {"name": "yesVotes", "type": "uint256", "internalType": "uint256"}, {"name": "noVotes", "type": "uint256", "internalType": "uint256"}, {"name": "implemented", "type": "bool", "internalType": "bool"}, {"name": "implementedAt", "type": "uint256", "internalType": "uint256"}]}], "stateMutability": "view"}, {"type": "function", "name": "getProposals", "inputs": [{"name": "offset", "type": "uint256", "internalType": "uint256"}, {"name": "limit", "type": "uint256", "internalType": "uint256"}], "outputs": [{"name": "", "type": "tuple[]", "internalType": "struct GiwaVote.Proposal[]", "components": [{"name": "id", "type": "uint256", "internalType": "uint256"}, {"name": "proposer", "type": "address", "internalType": "address"}, {"name": "title", "type": "string", "internalType": "string"}, {"name": "description", "type": "string", "internalType": "string"}, {"name": "creationTime", "type": "uint256", "internalType": "uint256"}, {"name": "deadline", "type": "uint256", "internalType": "uint256"}, {"name": "yesVotes", "type": "uint256", "internalType": "uint256"}, {"name": "noVotes", "type": "uint256", "internalType": "uint256"}, {"name": "implemented", "type": "bool", "internalType": "bool"}, {"name": "implementedAt", "type": "uint256", "internalType": "uint256"}]}], "stateMutability": "view"}, {"type": "function", "name": "getStatus", "inputs": [{"name": "id", "type": "uint256", "internalType": "uint256"}], "outputs": [{"name": "", "type": "uint8", "internalType": "uint8"}], "stateMutability": "view"}, {"type": "function", "name": "gvfToken", "inputs": [], "outputs": [{"name": "", "type": "address", "internalType": "contract GVF"}], "stateMutability": "view"}, {"type": "function", "name": "hasEverVoted", "inputs": [{"name": "", "type": "address", "internalType": "address"}], "outputs": [{"name": "", "type": "bool", "internalType": "bool"}], "stateMutability": "view"}, {"type": "function", "name": "hasVoted", "inputs": [{"name": "", "type": "uint256", "internalType": "uint256"}, {"name": "", "type": "address", "internalType": "address"}], "outputs": [{"name": "", "type": "bool", "internalType": "bool"}], "stateMutability": "view"}, {"type": "function", "name": "hasVotedOnProposal", "inputs": [{"name": "proposalId", "type": "uint256", "internalType": "uint256"}, {"name": "voter", "type": "address", "internalType": "address"}], "outputs": [{"name": "", "type": "bool", "internalType": "bool"}], "stateMutability": "view"}, {"type": "function", "name": "markImplemented", "inputs": [{"name": "proposalId", "type": "uint256", "internalType": "uint256"}], "outputs": [], "stateMutability": "nonpayable"}, {"type": "function", "name": "owner", "inputs": [], "outputs": [{"name": "", "type": "address", "internalType": "address"}], "stateMutability": "view"}, {"type": "function", "name": "proposalCount", "inputs": [], "outputs": [{"name": "", "type": "uint256", "internalType": "uint256"}], "stateMutability": "view"}, {"type": "function", "name": "proposals", "inputs": [{"name": "", "type": "uint256", "internalType": "uint256"}], "outputs": [{"name": "id", "type": "uint256", "internalType": "uint256"}, {"name": "proposer", "type": "address", "internalType": "address"}, {"name": "title", "type": "string", "internalType": "string"}, {"name": "description", "type": "string", "internalType": "string"}, {"name": "creationTime", "type": "uint256", "internalType": "uint256"}, {"name": "deadline", "type": "uint256", "internalType": "uint256"}, {"name": "yesVotes", "type": "uint256", "internalType": "uint256"}, {"name": "noVotes", "type": "uint256", "internalType": "uint256"}, {"name": "implemented", "type": "bool", "internalType": "bool"}, {"name": "implementedAt", "type": "uint256", "internalType": "uint256"}], "stateMutability": "view"}, {"type": "function", "name": "setBadge", "inputs": [{"name": "badge_", "type": "address", "internalType": "address"}], "outputs": [], "stateMutability": "nonpayable"}, {"type": "function", "name": "setGVF", "inputs": [{"name": "gvf_", "type": "address", "internalType": "address"}], "outputs": [], "stateMutability": "nonpayable"}, {"type": "function", "name": "totalVotesCast", "inputs": [], "outputs": [{"name": "", "type": "uint256", "internalType": "uint256"}], "stateMutability": "view"}, {"type": "function", "name": "verifier", "inputs": [], "outputs": [{"name": "", "type": "address", "internalType": "contract IVerifier"}], "stateMutability": "view"}, {"type": "function", "name": "vote", "inputs": [{"name": "proposalId", "type": "uint256", "internalType": "uint256"}, {"name": "support", "type": "bool", "internalType": "bool"}], "outputs": [], "stateMutability": "nonpayable"}, {"type": "event", "name": "BadgeMinted", "inputs": [{"name": "voter", "type": "address", "indexed": true, "internalType": "address"}, {"name": "tokenId", "type": "uint256", "indexed": false, "internalType": "uint256"}], "anonymous": false}, {"type": "event", "name": "GVFAwarded", "inputs": [{"name": "voter", "type": "address", "indexed": true, "internalType": "address"}, {"name": "amount", "type": "uint256", "indexed": false, "internalType": "uint256"}], "anonymous": false}, {"type": "event", "name": "ProposalCreated", "inputs": [{"name": "id", "type": "uint256", "indexed": true, "internalType": "uint256"}, {"name": "proposer", "type": "address", "indexed": true, "internalType": "address"}, {"name": "title", "type": "string", "indexed": false, "internalType": "string"}, {"name": "deadline", "type": "uint256", "indexed": false, "internalType": "uint256"}], "anonymous": false}, {"type": "event", "name": "ProposalImplemented", "inputs": [{"name": "id", "type": "uint256", "indexed": true, "internalType": "uint256"}, {"name": "at", "type": "uint256", "indexed": false, "internalType": "uint256"}], "anonymous": false}, {"type": "event", "name": "Voted", "inputs": [{"name": "id", "type": "uint256", "indexed": true, "internalType": "uint256"}, {"name": "voter", "type": "address", "indexed": true, "internalType": "address"}, {"name": "support", "type": "bool", "indexed": false, "internalType": "bool"}], "anonymous": false}]
+[
+  {
+    "type": "constructor",
+    "inputs": [
+      {
+        "name": "verifier_",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "attesterId_",
+        "type": "bytes32",
+        "internalType": "DojangAttesterId"
+      }
+    ],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "GVF_PER_VOTE",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "acceptOwnership",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "attesterId",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bytes32",
+        "internalType": "DojangAttesterId"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "badge",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract GiwaGovernanceBadge"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "createProposal",
+    "inputs": [
+      {
+        "name": "title",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "internalType": "string"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getProposal",
+    "inputs": [
+      {
+        "name": "id",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple",
+        "internalType": "struct GiwaVote.Proposal",
+        "components": [
+          {
+            "name": "id",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "proposer",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "creationTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "deadline",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "yesVotes",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "noVotes",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "implemented",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "implementedAt",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getProposals",
+    "inputs": [
+      {
+        "name": "offset",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "limit",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "tuple[]",
+        "internalType": "struct GiwaVote.Proposal[]",
+        "components": [
+          {
+            "name": "id",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "proposer",
+            "type": "address",
+            "internalType": "address"
+          },
+          {
+            "name": "title",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "description",
+            "type": "string",
+            "internalType": "string"
+          },
+          {
+            "name": "creationTime",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "deadline",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "yesVotes",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "noVotes",
+            "type": "uint256",
+            "internalType": "uint256"
+          },
+          {
+            "name": "implemented",
+            "type": "bool",
+            "internalType": "bool"
+          },
+          {
+            "name": "implementedAt",
+            "type": "uint256",
+            "internalType": "uint256"
+          }
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getStatus",
+    "inputs": [
+      {
+        "name": "id",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint8",
+        "internalType": "uint8"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "gvfToken",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract GVF"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "hasEverVoted",
+    "inputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "hasVoted",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "hasVotedOnProposal",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "voter",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "markImplemented",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "minQuorum",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "owner",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "pendingOwner",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "proposalCount",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "proposals",
+    "inputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [
+      {
+        "name": "id",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "proposer",
+        "type": "address",
+        "internalType": "address"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "description",
+        "type": "string",
+        "internalType": "string"
+      },
+      {
+        "name": "creationTime",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "deadline",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "yesVotes",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "noVotes",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "implemented",
+        "type": "bool",
+        "internalType": "bool"
+      },
+      {
+        "name": "implementedAt",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "renounceOwnership",
+    "inputs": [],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setBadge",
+    "inputs": [
+      {
+        "name": "badge_",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setGVF",
+    "inputs": [
+      {
+        "name": "gvf_",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "setMinQuorum",
+    "inputs": [
+      {
+        "name": "newQuorum",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "totalVotesCast",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "uint256",
+        "internalType": "uint256"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "transferOwnership",
+    "inputs": [
+      {
+        "name": "newOwner",
+        "type": "address",
+        "internalType": "address"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "verifier",
+    "inputs": [],
+    "outputs": [
+      {
+        "name": "",
+        "type": "address",
+        "internalType": "contract IVerifier"
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "vote",
+    "inputs": [
+      {
+        "name": "proposalId",
+        "type": "uint256",
+        "internalType": "uint256"
+      },
+      {
+        "name": "support",
+        "type": "bool",
+        "internalType": "bool"
+      }
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "event",
+    "name": "BadgeMinted",
+    "inputs": [
+      {
+        "name": "voter",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "tokenId",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "GVFAwarded",
+    "inputs": [
+      {
+        "name": "voter",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "amount",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "MinQuorumUpdated",
+    "inputs": [
+      {
+        "name": "oldValue",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      },
+      {
+        "name": "newValue",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "OwnershipTransferStarted",
+    "inputs": [
+      {
+        "name": "previousOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "newOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "OwnershipTransferred",
+    "inputs": [
+      {
+        "name": "previousOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "newOwner",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ProposalCreated",
+    "inputs": [
+      {
+        "name": "id",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "proposer",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "title",
+        "type": "string",
+        "indexed": false,
+        "internalType": "string"
+      },
+      {
+        "name": "deadline",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "ProposalImplemented",
+    "inputs": [
+      {
+        "name": "id",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "at",
+        "type": "uint256",
+        "indexed": false,
+        "internalType": "uint256"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "event",
+    "name": "Voted",
+    "inputs": [
+      {
+        "name": "id",
+        "type": "uint256",
+        "indexed": true,
+        "internalType": "uint256"
+      },
+      {
+        "name": "voter",
+        "type": "address",
+        "indexed": true,
+        "internalType": "address"
+      },
+      {
+        "name": "support",
+        "type": "bool",
+        "indexed": false,
+        "internalType": "bool"
+      }
+    ],
+    "anonymous": false
+  },
+  {
+    "type": "error",
+    "name": "OwnableInvalidOwner",
+    "inputs": [
+      {
+        "name": "owner",
+        "type": "address",
+        "internalType": "address"
+      }
+    ]
+  },
+  {
+    "type": "error",
+    "name": "OwnableUnauthorizedAccount",
+    "inputs": [
+      {
+        "name": "account",
+        "type": "address",
+        "internalType": "address"
+      }
+    ]
+  },
+  {
+    "type": "error",
+    "name": "ReentrancyGuardReentrantCall",
+    "inputs": []
+  }
+]

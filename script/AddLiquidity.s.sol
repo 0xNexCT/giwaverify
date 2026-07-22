@@ -10,7 +10,7 @@ contract AddLiquidityScript is Script {
         address swapAddr = 0x5095Bff088BcECf56476DcEAAE45c52351b6EF2B;
 
         address[5] memory tokens = [
-            0xaEb7B16e9Fd7DbB7C815f102E3Ec9d44d4358887,
+            0xaEb7b16e9FD7Dbb7c815F102E3EC9d44d4358887,
             0x7c9D5163EABb67417107A0a0e3DF0397A1ad3D03,
             0xE9D91031B2c330fAF5D6f1cd11981B06DC208A6e,
             0x52d57B37F0E5C9fEce966BC47ed0Ca2E7Cf78673,

@@ -3,15 +3,17 @@ pragma solidity ^0.8.28;
 import "./Interfaces.sol";
 import "./GiwaGovernanceBadge.sol";
 import "./GVF.sol";
+import "@openzeppelin/utils/ReentrancyGuard.sol";
+import "@openzeppelin/access/Ownable2Step.sol";
 
-contract GiwaVote {
+contract GiwaVote is Ownable2Step, ReentrancyGuard {
     IVerifier public verifier;
     DojangAttesterId public attesterId;
     GiwaGovernanceBadge public badge;
     GVF public gvfToken;
-    address public owner;
 
     uint256 public constant GVF_PER_VOTE = 10 * 10**18;
+    uint256 public minQuorum = 3;
 
     struct Proposal {
         uint256 id;
@@ -37,22 +39,17 @@ contract GiwaVote {
     event BadgeMinted(address indexed voter, uint256 tokenId);
     event GVFAwarded(address indexed voter, uint256 amount);
     event ProposalImplemented(uint256 indexed id, uint256 at);
-
-    modifier onlyOwner() {
-        require(msg.sender == owner, "Not owner");
-        _;
-    }
+    event MinQuorumUpdated(uint256 oldValue, uint256 newValue);
 
     modifier onlyVerified() {
         require(verifier.isVerified(msg.sender, attesterId), "Not verified");
         _;
     }
 
-    constructor(address verifier_, DojangAttesterId attesterId_) {
+    constructor(address verifier_, DojangAttesterId attesterId_) Ownable(msg.sender) {
         require(verifier_ != address(0), "Invalid verifier");
         verifier = IVerifier(verifier_);
         attesterId = attesterId_;
-        owner = msg.sender;
     }
 
     function setBadge(address badge_) external onlyOwner {
@@ -61,6 +58,11 @@ contract GiwaVote {
 
     function setGVF(address gvf_) external onlyOwner {
         gvfToken = GVF(gvf_);
+    }
+
+    function setMinQuorum(uint256 newQuorum) external onlyOwner {
+        emit MinQuorumUpdated(minQuorum, newQuorum);
+        minQuorum = newQuorum;
     }
 
     function createProposal(string calldata title, string calldata description) external onlyOwner {
@@ -92,7 +94,7 @@ contract GiwaVote {
         emit ProposalImplemented(proposalId, block.timestamp);
     }
 
-    function vote(uint256 proposalId, bool support) external onlyVerified {
+    function vote(uint256 proposalId, bool support) external onlyVerified nonReentrant {
         Proposal storage prop = proposals[proposalId];
         require(block.timestamp < prop.deadline, "Voting ended");
         require(!hasVoted[proposalId][msg.sender], "Already voted");
@@ -137,6 +139,8 @@ contract GiwaVote {
         require(id > 0 && id <= proposalCount, "Invalid id");
         Proposal storage prop = proposals[id];
         if (block.timestamp < prop.deadline) return 0;
+        uint256 total = prop.yesVotes + prop.noVotes;
+        if (total < minQuorum) return 3;
         if (prop.yesVotes > prop.noVotes) return 1;
         return 2;
     }

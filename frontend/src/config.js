@@ -29,4 +29,5 @@ export const GIWA_CHAIN = {
   },
 }
 
-export const WALLETCONNECT_PROJECT_ID = "a7a3a5a5a5a5a5a5a5a5a5a5a5a5a5a5"
+const envProjectId = typeof import.meta !== "undefined" ? import.meta.env?.VITE_WALLETCONNECT_PROJECT_ID : undefined
+export const WALLETCONNECT_PROJECT_ID = envProjectId || "a7a3a5a5a5a5a5a5a5a5a5a5a5a5a5a5"

@@ -99,14 +99,16 @@ export default function SwapSection({ isConnected, isVerified, onConnectRequest 
 
   const parsedIn = debouncedAmount ? parseUnits(debouncedAmount, DECIMALS) : 0n
 
-  const { data: amountOutRaw, isError: quoteFailed } = useReadContract({
+  const { data: quoteResult, isError: quoteFailed } = useReadContract({
     address: CONTRACTS.swap,
     abi: GiwaSwapAbi,
-    functionName: "getAmountOut",
+    functionName: "quote",
     args: [fromToken.address, toToken.address, parsedIn],
     query: { enabled: !!CONTRACTS.swap && parsedIn > 0n },
   })
 
+  const quoteOk = quoteResult && quoteResult[1] === true
+  const amountOutRaw = quoteOk ? quoteResult[0] : undefined
   const amountOut = amountOutRaw != null ? Number(amountOutRaw) / Number(DIVISOR) : null
 
   const minAmountOut = amountOutRaw != null
@@ -210,11 +212,12 @@ export default function SwapSection({ isConnected, isVerified, onConnectRequest 
   async function doSwap() {
     setSwapStep("swapping")
     try {
+      const deadline = BigInt(Math.floor(Date.now() / 1000) + 1200)
       const hash = await writeContractAsync({
         address: CONTRACTS.swap,
         abi: GiwaSwapAbi,
         functionName: "swap",
-        args: [fromToken.address, toToken.address, parsedIn, minAmountOut],
+        args: [fromToken.address, toToken.address, parsedIn, minAmountOut, deadline],
         ...gasParams,
       })
       await waitForTransactionReceipt(wagmiConfig, { hash })
