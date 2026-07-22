@@ -109,6 +109,8 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
       deadline: Number(p.deadline),
       yesVotes: Number(p.yesVotes),
       noVotes: Number(p.noVotes),
+      implemented: p.implemented,
+      implementedAt: Number(p.implementedAt ?? 0),
       status: new Date().getTime() / 1000 >= Number(p.deadline)
         ? (Number(p.yesVotes) > Number(p.noVotes) ? "passed" : "rejected")
         : "active",
@@ -410,6 +412,11 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
                           Ended {fmtDate(p.deadline)}
                         </span>
                       )}
+                      {p.status === "passed" && (
+                        <span className="text-xs" style={{ color: p.implemented ? "#34d399" : "var(--text-amber)" }}>
+                          {p.implemented ? `Implemented ${fmtDate(p.implementedAt)}` : "Implementation: Pending"}
+                        </span>
+                      )}
                       {waiting && voteStatus[p.id] === "success" && (
                         <span className="text-xs" style={{ color: "#34d399" }}>Voted ✓</span>
                       )}
@@ -465,6 +472,14 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
                 <span className="w-px h-4" style={{ backgroundColor: "var(--border-card)" }} />
                 <span>Deadline {fmtDate(selectedProposal.deadline)}</span>
               </div>
+
+              {selectedProposal.status === "passed" && (
+                <div className="mb-4 text-xs" style={{ color: selectedProposal.implemented ? "#34d399" : "var(--text-amber)" }}>
+                  {selectedProposal.implemented
+                    ? `Implemented on ${fmtDate(selectedProposal.implementedAt)}`
+                    : "Implementation: Pending"}
+                </div>
+              )}
 
               {/* vote breakdown */}
               <div className="mb-5 p-4 rounded-xl" style={{ backgroundColor: "var(--bg-card-hover)" }}>

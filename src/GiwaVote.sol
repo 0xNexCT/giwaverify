@@ -2,12 +2,16 @@ pragma solidity ^0.8.28;
 
 import "./Interfaces.sol";
 import "./GiwaGovernanceBadge.sol";
+import "./GVF.sol";
 
 contract GiwaVote {
     IVerifier public verifier;
     DojangAttesterId public attesterId;
     GiwaGovernanceBadge public badge;
+    GVF public gvfToken;
     address public owner;
+
+    uint256 public constant GVF_PER_VOTE = 10 * 10**18;
 
     struct Proposal {
         uint256 id;
@@ -18,6 +22,8 @@ contract GiwaVote {
         uint256 deadline;
         uint256 yesVotes;
         uint256 noVotes;
+        bool implemented;
+        uint256 implementedAt;
     }
 
     uint256 public proposalCount;
@@ -29,6 +35,8 @@ contract GiwaVote {
     event ProposalCreated(uint256 indexed id, address indexed proposer, string title, uint256 deadline);
     event Voted(uint256 indexed id, address indexed voter, bool support);
     event BadgeMinted(address indexed voter, uint256 tokenId);
+    event GVFAwarded(address indexed voter, uint256 amount);
+    event ProposalImplemented(uint256 indexed id, uint256 at);
 
     modifier onlyOwner() {
         require(msg.sender == owner, "Not owner");
@@ -51,6 +59,10 @@ contract GiwaVote {
         badge = GiwaGovernanceBadge(badge_);
     }
 
+    function setGVF(address gvf_) external onlyOwner {
+        gvfToken = GVF(gvf_);
+    }
+
     function createProposal(string calldata title, string calldata description) external onlyOwner {
         require(bytes(title).length > 0, "Empty title");
 
@@ -63,10 +75,21 @@ contract GiwaVote {
             creationTime: block.timestamp,
             deadline: block.timestamp + 15 days,
             yesVotes: 0,
-            noVotes: 0
+            noVotes: 0,
+            implemented: false,
+            implementedAt: 0
         });
 
         emit ProposalCreated(proposalCount, msg.sender, title, block.timestamp + 15 days);
+    }
+
+    function markImplemented(uint256 proposalId) external onlyOwner {
+        Proposal storage prop = proposals[proposalId];
+        require(prop.id != 0, "Proposal not found");
+        require(!prop.implemented, "Already implemented");
+        prop.implemented = true;
+        prop.implementedAt = block.timestamp;
+        emit ProposalImplemented(proposalId, block.timestamp);
     }
 
     function vote(uint256 proposalId, bool support) external onlyVerified {
@@ -91,6 +114,11 @@ contract GiwaVote {
             emit BadgeMinted(msg.sender, tokenId);
         } else if (!hasEverVoted[msg.sender]) {
             hasEverVoted[msg.sender] = true;
+        }
+
+        if (address(gvfToken) != address(0)) {
+            gvfToken.mint(msg.sender, GVF_PER_VOTE);
+            emit GVFAwarded(msg.sender, GVF_PER_VOTE);
         }
 
         emit Voted(proposalId, msg.sender, support);

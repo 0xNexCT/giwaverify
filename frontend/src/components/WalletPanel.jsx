@@ -4,6 +4,7 @@ import { formatEther } from "viem"
 import { FAUCET_TOKENS, CONTRACTS, GIWA_CHAIN } from "../config"
 import testTokenAbi from "../abis/TestToken.json"
 import GiwaGovernanceBadgeAbi from "../abis/GiwaGovernanceBadge.json"
+import GVFAbi from "../abis/GVF.json"
 
 function TokenRow({ token, address, onRefetch }) {
   const { data: raw, isPending, refetch } = useReadContract({
@@ -70,6 +71,14 @@ export default function WalletPanel({ open, onClose }) {
     query: { enabled: !!address && !!CONTRACTS.governanceBadge },
   })
 
+  const { data: gvfBalance, refetch: refetchGVF } = useReadContract({
+    address: CONTRACTS.gvf,
+    abi: GVFAbi,
+    functionName: "balanceOf",
+    args: [address],
+    query: { enabled: !!address && !!CONTRACTS.gvf },
+  })
+
   const registerRefetch = useCallback((fn) => {
     setRefreshFns((prev) => (prev.includes(fn) ? prev : [...prev, fn]))
   }, [])
@@ -77,6 +86,10 @@ export default function WalletPanel({ open, onClose }) {
   useEffect(() => {
     registerRefetch(refetchNative)
   }, [refetchNative, registerRefetch])
+
+  useEffect(() => {
+    if (refetchGVF) registerRefetch(refetchGVF)
+  }, [refetchGVF, registerRefetch])
 
   function handleRefresh() {
     setSpinning(true)
@@ -267,6 +280,27 @@ export default function WalletPanel({ open, onClose }) {
               </div>
               <div className="text-xs font-medium px-2 py-0.5 rounded" style={{ backgroundColor: "var(--bg-accent-soft)", color: "var(--text-accent)" }}>
                 Badge
+              </div>
+            </div>
+          )}
+
+          {/* governance participation (GVF) */}
+          {address && Number(gvfBalance ?? 0) > 0 && (
+            <div className="flex items-center justify-between py-2.5 border-t" style={{ borderColor: "var(--border-card)" }}>
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold"
+                  style={{ backgroundColor: "var(--bg-accent-soft)", color: "var(--text-accent)" }}
+                >
+                  GVF
+                </div>
+                <div>
+                  <div className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>GVF</div>
+                  <div className="text-xs" style={{ color: "var(--text-dim)" }}>Participation</div>
+                </div>
+              </div>
+              <div className="text-sm font-mono" style={{ color: "var(--text-primary)" }}>
+                {Number(gvfBalance) / 10 ** 18}
               </div>
             </div>
           )}
