@@ -48,8 +48,7 @@ function HeroSection({ onConnect, isConnected }) {
         <p className="max-w-2xl mx-auto text-lg md:text-xl leading-relaxed mb-10" style={{ color: "var(--text-muted)" }}>
           GiwaVerify is a verification layer for the GIWA ecosystem.
           Every wallet must be linked to a real person through Dojang attestations.
-           This makes token distributions, token swaps, and onchain governance
-          sybil-resistant by default.
+           This makes token distributions, token swaps, and onchain governance.
         </p>
 
         <div className="flex items-center justify-center gap-4">
@@ -89,16 +88,13 @@ function AboutSection() {
         <div className="space-y-6 text-base leading-relaxed text-center" style={{ color: "var(--text-muted)" }}>
           <p className="text-lg">
             GiwaVerify is a <strong className="font-medium" style={{ color: "var(--text-secondary)" }}>KYC-gated dApp ecosystem</strong> built on GIWA Chain.
-            GIWA is a high-performance OP Stack L2 with 1-second block times and Flashblocks preconfirmation.
+
           </p>
           <p className="text-lg">
             Anyone who wants to use a dApp on this platform must first pass identity verification through <strong className="font-medium" style={{ color: "var(--text-secondary)" }}>Dojang</strong>,
             GIWA's onchain attestation system powered by Upbit KYC.
           </p>
-          <p className="text-lg">
-            This creates a <strong className="font-medium" style={{ color: "var(--text-secondary)" }}>sybil-resistant environment</strong> where every wallet is linked to a verified real person.
-            No bots, no fake accounts, no wash trading.
-          </p>
+
           <p className="text-lg">
             GiwaVerify unlocks three core modules after verification:
           </p>
@@ -159,7 +155,7 @@ function FeaturesSection() {
   const features = [
     {
       title: "Faucet",
-      desc: "Claim test tokens with a 24-hour cooldown per wallet per token. Sybil-resistant distribution for verified users.",
+      desc: "Claim test tokens with a 24-hour cooldown per wallet per token.",
       to: "/faucet",
       accent: "var(--accent-faucet)",
       bg: "var(--accent-faucet-soft)",

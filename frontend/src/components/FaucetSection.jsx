@@ -94,7 +94,7 @@ export default function FaucetSection({ isConnected, onConnectRequest }) {
     query: { enabled: !!address && !!token?.address && !!CONTRACTS.faucet },
   })
 
-  const { data: faucetBalance } = useReadContract({
+  const { data: faucetBalance, refetch: refetchFaucetBal } = useReadContract({
     address: CONTRACTS.faucet,
     abi: GiwaFaucetAbi,
     functionName: "getFaucetBalance",
@@ -109,7 +109,7 @@ export default function FaucetSection({ isConnected, onConnectRequest }) {
     query: { enabled: !!token?.address },
   })
 
-  const { data: userBalance } = useReadContract({
+  const { data: userBalance, refetch: refetchUserBal } = useReadContract({
     address: token?.address,
     abi: ERC20_MIN_ABI,
     functionName: "balanceOf",
@@ -120,6 +120,11 @@ export default function FaucetSection({ isConnected, onConnectRequest }) {
   useEffect(() => {
     setCd(Number(rawCooldown ?? 0))
   }, [rawCooldown])
+
+  useEffect(() => {
+    setLocalFaucet(null)
+    setLocalUser(null)
+  }, [selectedIdx])
 
   useEffect(() => {
     if (cd <= 0) return
@@ -133,8 +138,10 @@ export default function FaucetSection({ isConnected, onConnectRequest }) {
   const isOnCooldown = cd > 0
 
   const rawClaimable = claimAmount ? Number(claimAmount) : 0
-  const rawFaucet = faucetBalance ? Number(faucetBalance) : 0
-  const rawUser = userBalance ? Number(userBalance) : 0
+  const [localFaucet, setLocalFaucet] = useState(null)
+  const [localUser, setLocalUser] = useState(null)
+  const rawFaucet = localFaucet ?? (faucetBalance ? Number(faucetBalance) : 0)
+  const rawUser = localUser ?? (userBalance ? Number(userBalance) : 0)
   const decimals = 18
   const divisor = 10 ** decimals
 
@@ -188,6 +195,11 @@ export default function FaucetSection({ isConnected, onConnectRequest }) {
       }
       await new Promise((r) => setTimeout(r, 3000))
       setCd(86400)
+      await new Promise((r) => setTimeout(r, 1000))
+      setLocalFaucet(rawFaucet - rawClaimable)
+      setLocalUser(rawUser + rawClaimable)
+      refetchFaucetBal()
+      refetchUserBal()
     } catch {
       setCd(0)
       refetchCooldown()

@@ -4,13 +4,10 @@ Unofficial community prototype, submitted for GASOK 2026. Not affiliated with GI
 
 ## What is GiwaVerify?
 
-GiwaVerify is a KYC-gated dApp ecosystem built on GIWA Chain, a high-performance
-OP Stack L2 with 1-second block times and Flashblocks preconfirmation.
+GiwaVerify is a KYC-gated dApp ecosystem built on GIWA Chain.
 
 Before using any dApp on the platform, users must pass identity verification
-through Dojang, GIWA's onchain attestation system powered by Upbit KYC. This
-ties every wallet to a verified real person, so the environment stays free of
-bots, fake accounts, and wash trading.
+through Dojang, GIWA's onchain attestation system powered by Upbit KYC.
 
 Once verified, GiwaVerify unlocks three core modules...
 
@@ -43,7 +40,7 @@ A centered modal shows wallet options when you click "Connect Wallet" in the hea
 Every transaction flow (faucet claim, swap, vote) checks the chain first. If you're not on GIWA, it tries to switch automatically. If the chain isn't in your wallet, it adds it.
 
 ### Faucet
-5 test tokens (GVA, GVB, GVC, GVD, GVE) at 18 decimals each. You can claim 100 of each token once every 24 hours, with a lifetime max of 500 per wallet. The claim button shows a countdown when you're on cooldown. The contract has a `claimAll()` batch function but it's not exposed in the UI.
+5 test tokens (GVA, GVB, GVC, GVD, GVE) at 18 decimals each. You can claim 100 of each token once every 24 hours, with a lifetime max of 500 per wallet. The claim button shows a countdown when you're on cooldown. After claiming, cooldown activates immediately, and balances update 1 second later. The contract has a `claimAll()` batch function but it's not exposed in the UI.
 
 Contracts:
 - GiwaFaucet: `0xD478F71086146539Aad272f74aa7E73ee1ba9A4B`
@@ -54,14 +51,14 @@ Contracts:
 - GVE: `0x58C5c8641450609275F38376F614cf328dB49df0`
 
 ### Swap
-AMM with a 0.3% fee. Pick a from/to token pair, enter an amount, and the estimated output shows up. If the swap contract needs approval, you get an Approve step first. You can tweak transaction speed (Slow/Medium/Fast) in the settings menu. Reserves for the selected pair are shown. Only verified wallets can swap.
+AMM with a 0.3% fee. Pick a from/to token pair, enter an amount, and the estimated output shows up. If the swap contract needs approval, you get an Approve step first. You can tweak transaction speed (Slow/Medium/Fast) in the settings menu. Reserves for the selected pair are shown.
 
 Swap contract: `0x5095Bff088BcECf56476DcEAAE45c52351b6EF2B`
 
 Liquidity exists for GVA-GVB (200K each), GVA-GVC (100K each), and GVB-GVC (100K each).
 
 ### Governance / Voting
-Verified wallets can vote on proposals. Each vote mints 10 GVF tokens and, on your first vote ever, a soulbound Governance Participant badge. Voting lasts 30 days from creation. If yes votes beat no votes at the deadline, the owner can mark it as implemented.
+Wallets can vote on proposals. Each vote mints 10 GVF tokens and, on your first vote ever, a soulbound Governance Participant badge. Voting lasts 30 days from creation. If yes votes beat no votes at the deadline, the owner can mark it as implemented.
 
 Governance contract: `0x21b79389c3820b975961212b7da16b732982edf1`
 Badge contract: `0xAe6612cAc8957fc069B24055Ae9b288bB350105d`
@@ -128,3 +125,5 @@ forge script script/DeployVoteV2.s.sol --rpc-url <RPC> --broadcast --private-key
 - Switched deployer wallet balances down to 100 tokens each
 - Frontend bug fixes: the "You voted: Reject" false positive, faucet gas limit, claim/swap spinner UX
 - Full contract audit completed (findings documented in the repo)
+- Public testing mode: PublicVerifier always returns true, no KYC required
+- Balance update moved to 1 second after cooldown starts for smoother UX
