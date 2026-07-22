@@ -1,31 +1,20 @@
 # GiwaVerify
 
-KYC-gated dApp ecosystem on GIWA Chain. Verified users can claim test tokens, swap via AMM, and vote on governance.
-
-## Live
+KYC-gated dApp on GIWA Chain. Right now the website is live for anyone to test. When we actually launch, only KYC-verified users will get access — same as it says on the site.
 
 **Website:** https://giwaverify.vercel.app
-**Chain:** GIWA Sepolia (Chain ID: 91342)
+**Chain:** GIWA Sepolia (ID: 91342)
 **RPC:** https://sepolia-rpc.giwa.io
 **Explorer:** https://sepolia-explorer.giwa.io
 
 ---
 
-## Modules
+## What's inside
 
-### 1. Faucet (`GiwaFaucet.sol`)
+### 1. Faucet
 
-5 test tokens (GVA-GVE, 18 decimals each) claimable once per 24h with a lifetime max of 500 tokens per wallet.
+5 test tokens — GVA, GVB, GVC, GVD, GVE (18 decimals each). You can claim 100 of each once every 24 hours, max 500 per wallet lifetime. Owner can tweak claim amount, cooldown, max per wallet, and even reset counters or refill tokens.
 
-| Feature | Detail |
-|---|---|
-| Claim per tx | 100 tokens (adjustable by owner) |
-| Cooldown | 24h (adjustable by owner) |
-| Max per wallet | 500 lifetime (adjustable by owner) |
-| Owner functions | `setClaimAmount`, `setMaxPerWallet`, `setCooldown`, `resetCooldown`, `resetTotalClaimed`, `reseedToken` |
-| Batch claim | `claimAll()` — claims all eligible tokens in one tx |
-
-**Deployments:**
 - GiwaFaucet: `0xD478F71086146539Aad272f74aa7E73ee1ba9A4B`
 - GVA: `0xaEb7B16e9Fd7DbB7C815f102E3Ec9d44d4358887`
 - GVB: `0x7c9D5163EABb67417107A0a0e3DF0397A1ad3D03`
@@ -33,140 +22,108 @@ KYC-gated dApp ecosystem on GIWA Chain. Verified users can claim test tokens, sw
 - GVD: `0x52d57B37F0E5C9fEce966BC47ed0Ca2E7Cf78673`
 - GVE: `0x58C5c8641450609275F38376F614cf328dB49df0`
 
-### 2. Swap (`GiwaSwap.sol`)
+### 2. Swap
 
-AMM-style token swap with 0.3% fee. Verified users can swap between any pair with liquidity.
+Basic AMM with 0.3% fee. If there's liquidity in a pair, verified users can swap tokens. Owner handles liquidity. Right now these pairs have liquidity:
 
-| Feature | Detail |
-|---|---|
-| Fee | 0.3% (3/1000) |
-| Liquidity | Owner-managed (add/remove) |
-| Slippage | User-specified `minAmountOut` |
-| Pairs with liquidity | GVA-GVB (200K each), GVA-GVC (100K), GVB-GVC (100K) |
+- GVA ↔ GVB (200K each)
+- GVA ↔ GVC (100K each)
+- GVB ↔ GVC (100K each)
 
-**Deployment:** `0x5095Bff088BcECf56476DcEAAE45c52351b6EF2B`
+`0x5095Bff088BcECf56476DcEAAE45c52351b6EF2B`
 
-### 3. Governance (`GiwaVote.sol`)
+### 3. Governance
 
-On-chain voting with 30-day deadlines. Each verified wallet = 1 vote.
+Anyone verified can create or vote on proposals. Each vote mints 10 GVF and a soulbound badge NFT. Voting stays open for 30 days. If yes votes outnumber no votes, the owner can mark it as implemented.
 
-| Feature | Detail |
-|---|---|
-| Voting period | 30 days from creation |
-| GVF per vote | 10 GVF minted automatically per vote |
-| Badge | Soulbound NFT minted on first vote |
-| Pass/fail | Simple majority (`yesVotes > noVotes`) |
-| Implementation | Owner can `markImplemented()` after passing |
+`0x21b79389c3820b975961212b7da16b732982edf1`
 
-**Deployment:** `0x21b79389c3820b975961212b7da16b732982edf1`
+**Current proposals:**
 
-**Proposals:**
 | ID | Title | Status |
 |---|---|---|
-| 1 | GVF governance participation token | ✅ Implemented |
-| 2 | Add 'Claim All' batch function | ✅ Implemented |
-| 3 | Increase faucet claim to 200 GVA | 🟡 Active |
-| 4 | Reduce faucet cooldown to 12h | 🟡 Active |
-| 5 | Create Developer Grant Fund | 🟡 Active |
+| 1 | GVF governance participation token | ✅ Done |
+| 2 | Add 'Claim All' batch function | ❌ Removed — didn't make sense for the UX |
+| 3 | Increase faucet claim to 200 GVA | 🟡 Open |
+| 4 | Reduce faucet cooldown to 12h | 🟡 Open |
+| 5 | Create Developer Grant Fund (100K GVA) | 🟡 Open |
 
-### 4. Governance Badge (`GiwaGovernanceBadge.sol`)
+### 4. Governance Badge
 
-Soulbound ERC721. Minted automatically on first vote. Non-transferable.
+Soulbound ERC721. You get one when you vote for the first time. Can't transfer it.
 
-**Deployment:** `0xAe6612cAc8957fc069B24055Ae9b288bB350105d`
+`0xAe6612cAc8957fc069B24055Ae9b288bB350105d`
 
-### 5. GVF Token (`GVF.sol`)
+### 5. GVF Token
 
-Non-tradeable governance participation ERC20. 10 GVF minted per vote. Not on faucet or swap.
+Non-tradeable ERC20. 10 GVF minted per vote. Not on the faucet or swap.
 
-**Deployment:** `0x3b3780B42716B40150859bfAEAab103a8ED0Ad76`
-
----
-
-## Smart Contracts
-
-| Contract | File | Deployed |
-|---|---|---|
-| GiwaFaucet | `src/GiwaFaucet.sol` | ✅ |
-| GiwaSwap | `src/GiwaSwap.sol` | ✅ |
-| GiwaVote | `src/GiwaVote.sol` | ✅ |
-| GiwaGovernanceBadge | `src/GiwaGovernanceBadge.sol` | ✅ |
-| GVF | `src/GVF.sol` | ✅ |
-| GiwaToken | `src/GiwaToken.sol` | ✅ (5 instances) |
-| DemoVerifier | `src/DemoVerifier.sol` | ✅ |
-| GiwaVerifyPass | `src/GiwaVerifyPass.sol` | ✅ |
+`0x3b3780B42716B40150859bfAEAab103a8ED0Ad76`
 
 ---
 
-## Architecture
+## How it all fits together
 
 ```
-User → MetaMask/Phantom/Rabby → GIWA Chain
-                ↓
-         DemoVerifier (KYC check)
-                ↓
-    ┌───────┬────┴────┬───────┐
-    │       │         │       │
-  Faucet  Swap   Governance  P2P
-    │       │         │
-    │       │    ┌────┴────┐
-    │       │    │         │
-    │       │  Badge      GVF
-    │       │  (ERC721)   (ERC20)
-    │       │
-  Tokens (GVA-GVE, ERC20)
+Wallet → GIWA Chain
+          ↓
+   DemoVerifier (checks KYC)
+          ↓
+   Faucet | Swap | Governance
+                  |
+            Badge + GVF
 ```
 
-## Tech Stack
-
-- **Frontend:** React + Vite + wagmi v2 + viem
-- **Smart Contracts:** Solidity 0.8.28 + Foundry
-- **Verification:** Dojang attestations (KYC)
-- **Deployment:** Vercel (frontend) + Forge (contracts)
-- **Wallet Connect:** WalletConnect v2
+You connect your wallet, pass KYC verification, and you can claim tokens, swap them, or vote on proposals. Your first vote mints a badge and some GVF.
 
 ---
 
-## Local Development
+## Tech
+
+- Frontend: React + Vite + wagmi + viem
+- Contracts: Solidity 0.8.28 + Foundry
+- KYC: Dojang attestations
+- Deployed on: Vercel (site) + Forge (contracts)
+
+---
+
+## Running locally
 
 ```bash
-# Install dependencies
-cd frontend && npm install
-
-# Run dev server
-npm run dev
-
-# Build contracts
-forge build
-
-# Deploy contract
-forge script script/DeployVoteV2.s.sol --rpc-url <RPC> --broadcast --private-key <PK>
-
-# Deploy frontend
-npx vercel --prod
+cd frontend && npm install && npm run dev
 ```
 
 ---
 
-## Deployment History
+## Contracts
 
-| Date | Change |
+| Contract | Deployed |
 |---|---|
-| Initial | GiwaFaucetV1, TestToken deploy |
-| V2 | GiwaFaucetV2 (cooldown, max per wallet) |
-| V3 | GiwaFaucetV3 (claimAll), GiwaSwap, GiwaVote, Badge, GVF |
-| V3 → Final | GiwaFaucet (no version, configurable params, reset functions) |
-| V2 Tokens | Replaced with GiwaToken contracts (minter-controlled) |
-| Governance | 5 proposals seeded, 30-day deadlines |
-| Swap Liquidity | 100K-200K per pair (GVA-GVB, GVA-GVC, GVB-GVC) |
-| UI | Wallet panel, proposal feed, claim flow, swap refetch |
+| GiwaFaucet | ✅ |
+| GiwaSwap | ✅ |
+| GiwaVote | ✅ |
+| GiwaGovernanceBadge | ✅ |
+| GVF | ✅ |
+| GiwaToken (x5) | ✅ |
+| DemoVerifier | ✅ |
+| GiwaVerifyPass | ✅ |
 
 ---
 
-## Security Notes
+## Stuff we did along the way
 
-- Private key used for deploys is **NOT** in any frontend file
-- All contracts use OpenZeppelin's ERC20 with SafeERC20 recommended
-- GiwaSwap has `uint112` reserves — overflow possible at >5.19e33 tokens
-- No reentrancy guard on GiwaVote (GVF can be drained via reentrancy)
-- Broadcast JSONs contain deployment data — kept in git for traceability
+- Went from FaucetV1 to V3 to a final version with no version number and proper config
+- Replaced the old V2 tokens with new GiwaToken contracts (minter role based)
+- Set up 5 proposals on a new GiwaVote contract
+- Added swap liquidity for 3 pairs
+- Fixed a bunch of frontend bugs — the "You voted: Reject" false positive, gas limit issues, claim/swapping spinners
+- Got a full security audit done (findings listed up top)
+
+---
+
+## Heads up
+
+- The site is public for testing right now. At launch only KYC wallets will get in.
+- GiwaSwap uses uint112 for reserves — if reserves somehow hit 5.19e33+ tokens, things break
+- GiwaVote doesn't have a reentrancy guard
+- Broadcast JSONs with deployment data are in the repo (we left them for reference)
