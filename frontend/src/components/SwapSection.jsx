@@ -54,7 +54,7 @@ const SPEED_PARAMS = {
   fast: { maxPriorityFeePerGas: 100_000_000n, maxFeePerGas: 200_000_000n },
 }
 
-export default function SwapSection({ isConnected, isVerified, onConnectRequest }) {
+export default function SwapSection({ isConnected, onConnectRequest }) {
   const { address } = useAccount()
   const [fromToken, setFromToken] = useState(FAUCET_TOKENS[0])
   const [toToken, setToToken] = useState(FAUCET_TOKENS[1])
@@ -240,20 +240,6 @@ export default function SwapSection({ isConnected, isVerified, onConnectRequest 
         <button onClick={onConnectRequest} className="btn-accent-p2p w-full py-3.5 rounded-lg text-base font-semibold">
           Connect Wallet to Swap
         </button>
-      )
-    }
-    if (isVerified === false) {
-      return (
-        <div className="w-full py-3.5 rounded-lg text-base text-center" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-amber)" }}>
-          Verify your wallet to swap
-        </div>
-      )
-    }
-    if (isVerified === undefined) {
-      return (
-        <div className="w-full py-3.5 rounded-lg text-base text-center" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-muted)" }}>
-          Verifying wallet...
-        </div>
       )
     }
     if (!amountIn || parseFloat(amountIn) <= 0) {

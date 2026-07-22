@@ -67,7 +67,7 @@ function formatTime(seconds) {
   return `${s}s`
 }
 
-export default function FaucetSection({ isConnected, isVerified, onConnectRequest }) {
+export default function FaucetSection({ isConnected, onConnectRequest }) {
   const { address } = useAccount()
   const [selectedIdx, setSelectedIdx] = useState(0)
   const [switchStatus, setSwitchStatus] = useState("idle")
@@ -270,20 +270,6 @@ export default function FaucetSection({ isConnected, isVerified, onConnectReques
               <button onClick={onConnectRequest} className="btn-accent-faucet w-full py-3.5 rounded-lg text-base font-semibold">
                 Connect Wallet to Claim
               </button>
-            )
-          }
-          if (isVerified === false) {
-            return (
-              <div className="w-full py-3.5 rounded-lg text-base text-center" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-amber)" }}>
-                Verify your wallet to access the faucet
-              </div>
-            )
-          }
-          if (isVerified === undefined) {
-            return (
-              <div className="w-full py-3.5 rounded-lg text-base text-center" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-muted)" }}>
-                Verifying wallet...
-              </div>
             )
           }
           return (

@@ -60,7 +60,7 @@ function Spinner() {
   )
 }
 
-export default function VoteSection({ isConnected, isVerified, onConnectRequest }) {
+export default function VoteSection({ isConnected, onConnectRequest }) {
   const { address } = useAccount()
   const wagmiConfig = useConfig()
   const [filter, setFilter] = useState("active")
@@ -389,12 +389,7 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
                           Connect wallet to vote
                         </button>
                       )}
-                      {!ended && supportVote === undefined && isConnected && isVerified === false && (
-                        <span className="text-xs font-medium px-3 py-1.5 rounded-lg" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-amber)" }}>
-                          Verify to vote
-                        </span>
-                      )}
-                      {!ended && supportVote === undefined && isConnected && isVerified === true && (
+                      {!ended && supportVote === undefined && isConnected && (
                         <div className="flex gap-2">
                           <button
                             disabled={isApproving}
@@ -543,17 +538,7 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
                       Connect Wallet to Vote
                     </button>
                   )}
-                  {isConnected && isVerified === false && (
-                    <div className="flex-1 py-3 rounded-lg text-sm text-center" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-amber)" }}>
-                      Verify your wallet to vote
-                    </div>
-                  )}
-                  {isConnected && isVerified === undefined && (
-                    <div className="flex-1 py-3 rounded-lg text-sm text-center" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-dim)" }}>
-                      Verifying wallet...
-                    </div>
-                  )}
-                  {isConnected && isVerified === true && (
+                  {isConnected && (
                     <>
                       {(() => {
                         const modalVote = selectedProposal.id in localVotes ? localVotes[selectedProposal.id] : (votedMap[selectedProposal.id] || undefined)
