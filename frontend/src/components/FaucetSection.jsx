@@ -73,6 +73,7 @@ export default function FaucetSection({ isConnected, isVerified, onConnectReques
   const [switchStatus, setSwitchStatus] = useState("idle")
   const [cd, setCd] = useState(0)
   const [claiming, setClaiming] = useState(false)
+  const [claimingAll, setClaimingAll] = useState(false)
   const [addingTokens, setAddingTokens] = useState(false)
   const { writeContract, isPending } = useWriteContract()
 
@@ -180,6 +181,25 @@ export default function FaucetSection({ isConnected, isVerified, onConnectReques
       setCd(86400)
     } catch {}
     setClaiming(false)
+  }
+
+  async function handleClaimAll() {
+    setSwitchStatus("idle")
+    if (window.ethereum && Number(window.ethereum.chainId) !== GIWA_CHAIN.id) {
+      setSwitchStatus("switching")
+      const ok = await ensureChain()
+      if (!ok) { setSwitchStatus("error"); return }
+      setSwitchStatus("idle")
+    }
+    try {
+      flushSync(() => setClaimingAll(true))
+      await writeContract({
+        address: CONTRACTS.faucet,
+        abi: GiwaFaucetAbi,
+        functionName: "claimAll",
+      })
+    } catch {}
+    setClaimingAll(false)
   }
 
   return (
@@ -291,6 +311,19 @@ export default function FaucetSection({ isConnected, isVerified, onConnectReques
             </button>
           )
         })()}
+
+        {isConnected && isVerified === true && (
+          <button
+            onClick={handleClaimAll}
+            disabled={claimingAll || isPending || switchStatus === "switching"}
+            className="w-full py-2.5 rounded-lg text-sm font-medium transition-all"
+            style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-secondary)", border: "1px solid var(--border-card)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--accent-faucet-soft)"; e.currentTarget.style.borderColor = "var(--accent-faucet)" }}
+            onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "var(--bg-card-hover)"; e.currentTarget.style.borderColor = "var(--border-card)" }}
+          >
+            {switchStatus === "switching" ? "Switching..." : claimingAll ? "Claiming all..." : "Claim All Available"}
+          </button>
+        )}
 
         {switchStatus === "error" && (
           <p className="text-xs" style={{ color: "var(--text-amber)" }}>Switch rejected. Please switch to GIWA manually.</p>

@@ -73,7 +73,7 @@ contract GiwaVote {
             title: title,
             description: description,
             creationTime: block.timestamp,
-            deadline: block.timestamp + 15 days,
+            deadline: block.timestamp + 30 days,
             yesVotes: 0,
             noVotes: 0,
             implemented: false,
