@@ -12,7 +12,7 @@ through Dojang, GIWA's onchain attestation system powered by Upbit KYC. This
 ties every wallet to a verified real person, so the environment stays free of
 bots, fake accounts, and wash trading.
 
-Once verified, GiwaVerify unlocks three core modules:
+Once verified, GiwaVerify unlocks three core modules...
 
 > **Public Test Notice:** This website is currently open for everyone to test. Once live, only wallets with valid Dojang attestations (KYC) will be able to use the dApps. So check it out while you can!
 
