@@ -4,7 +4,7 @@ Unofficial community prototype, submitted for GASOK 2026. Not affiliated with GI
 
 KYC-gated dApps on GIWA Chain. The site is public right now for testing. At launch, only wallets with a valid Dojang attestation will get access.
 
-**Website:** https://giwaverify.vercel.app
+**Website:** https://giwaverify.vercel.app'
 **Chain:** GIWA Sepolia (ID: 91342)
 **RPC:** https://sepolia-rpc.giwa.io
 **Explorer:** https://sepolia-explorer.giwa.io
