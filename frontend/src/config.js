@@ -1,19 +1,19 @@
 export const CONTRACTS = {
   demoVerifier: "0x7893e1AcaeEDADFC4fa4a88e9E83a65e4C5BF19e",
   verifyPass: "0x3e43CdF61bE443133Cd02f7F4785bC92c8a505a7",
-  swap: "0x5095Bff088BcECf56476DcEAAE45c52351b6EF2B",
-  vote: "0x21b79389c3820b975961212b7da16b732982edf1",
-  governanceBadge: "0xAe6612cAc8957fc069B24055Ae9b288bB350105d",
-  gvf: "0x3b3780B42716B40150859bfAEAab103a8ED0Ad76",
-  faucet: "0xd478f71086146539aad272f74aa7e73ee1ba9a4b",
+  swap: "0x21509BD39AA972FFCABd8A16C90790Ea4d0b8EC3",
+  vote: "0xE29C388f46545F65EE7fbAcaCcF7B20Ed5C19233",
+  governanceBadge: "0xa070EF81Af0EA0B595E112aDe9bD3aFb92204674",
+  gvf: "0x48A227d0fcc84602c2af7a55918Fe473b51ab1FB",
+  faucet: "0x9a112Aa851116425A745c0199A2b7D7706841190",
 }
 
 export const FAUCET_TOKENS = [
-  { address: "0xaeb7b16e9fd7dbb7c815f102e3ec9d44d4358887", symbol: "GVA", name: "GiwaVerified Alpha" },
-  { address: "0x7c9d5163eabb67417107a0a0e3df0397a1ad3d03", symbol: "GVB", name: "GiwaVerified Beta" },
-  { address: "0xe9d91031b2c330faf5d6f1cd11981b06dc208a6e", symbol: "GVC", name: "GiwaVerified Gamma" },
-  { address: "0x52d57b37f0e5c9fece966bc47ed0ca2e7cf78673", symbol: "GVD", name: "GiwaVerified Delta" },
-  { address: "0x58c5c8641450609275f38376f614cf328db49df0", symbol: "GVE", name: "GiwaVerified Epsilon" },
+  { address: "0x9F03e390725216E38dBcb9106B4A6ec2611da7b2", symbol: "GVA", name: "GiwaVerified Alpha" },
+  { address: "0x1EE1c3516eB72B79f2d6BE419Bf4fFAd6088225e", symbol: "GVB", name: "GiwaVerified Beta" },
+  { address: "0xdBFe78649585CF656D99f73A036093ca4DCF9ada", symbol: "GVC", name: "GiwaVerified Gamma" },
+  { address: "0x40405F98E2a646ebBFb5ab55806a0a118E04a286", symbol: "GVD", name: "GiwaVerified Delta" },
+  { address: "0x48CaFE7eB73330E07B9dF0C61D4012aD0aD2c813", symbol: "GVE", name: "GiwaVerified Epsilon" },
 ]
 
 export const GIWA_CHAIN = {

@@ -51,6 +51,15 @@ function fmtDate(ts) {
   return d.toLocaleDateString(undefined, { month: "short", day: "numeric", year: "numeric", hour: "2-digit", minute: "2-digit" })
 }
 
+function Spinner() {
+  return (
+    <svg className="animate-spin -ml-1 mr-1.5 h-3 w-3 inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+      <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+      <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+    </svg>
+  )
+}
+
 export default function VoteSection({ isConnected, isVerified, onConnectRequest }) {
   const { address } = useAccount()
   const wagmiConfig = useConfig()
@@ -58,6 +67,8 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
   const [selectedProposal, setSelectedProposal] = useState(null)
   const [switchStatus, setSwitchStatus] = useState("idle")
   const [voteStatus, setVoteStatus] = useState({})
+  const [localVotes, setLocalVotes] = useState({})
+  const [pendingAction, setPendingAction] = useState({})
   const { writeContractAsync, isPending } = useWriteContract()
   const modalRef = useRef(null)
 
@@ -178,6 +189,8 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
       if (!ok) { setSwitchStatus("error"); return }
       setSwitchStatus("idle")
     }
+    const action = support ? "approve" : "reject"
+    setPendingAction((prev) => ({ ...prev, [proposalId]: action }))
     setVoteStatus((prev) => ({ ...prev, [proposalId]: "pending" }))
     try {
       const hash = await writeContractAsync({
@@ -187,13 +200,16 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
         args: [BigInt(proposalId), support],
       })
       await waitForTransactionReceipt(wagmiConfig, { hash })
+      setLocalVotes((prev) => ({ ...prev, [proposalId]: support }))
       setVoteStatus((prev) => ({ ...prev, [proposalId]: "success" }))
+      setPendingAction((prev) => ({ ...prev, [proposalId]: undefined }))
       setTimeout(() => {
         setVoteStatus((prev) => ({ ...prev, [proposalId]: undefined }))
         refetchAll()
       }, 1500)
     } catch {
       setVoteStatus((prev) => ({ ...prev, [proposalId]: undefined }))
+      setPendingAction((prev) => ({ ...prev, [proposalId]: undefined }))
     }
   }
 
@@ -219,7 +235,6 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
   const total = Number(countData ?? 0)
   const totalVotes = Number(totalVotesData ?? 0)
   const hasBadge = hasEverVotedData === true
-  const isPendingVote = (id) => voteStatus[id] === "pending" || voteStatus[id] === "success"
 
   return (
     <>
@@ -304,10 +319,11 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
             const yesPct = totalVoteCount > 0 ? Math.round((p.yesVotes / totalVoteCount) * 100) : 0
             const noPct = totalVoteCount > 0 ? Math.round((p.noVotes / totalVoteCount) * 100) : 0
             const remaining = timeLeft(p.deadline)
-            const userVoted = votedMap[p.id]
-            const waiting = isPendingVote(p.id)
-            const votedSupport = userVoted
+            const hasLocallyVoted = p.id in localVotes
+            const supportVote = hasLocallyVoted ? localVotes[p.id] : (votedMap[p.id] ? true : undefined)
             const ended = p.status !== "active"
+            const isApproving = pendingAction[p.id] === "approve"
+            const isRejecting = pendingAction[p.id] === "reject"
 
             return (
               <div
@@ -368,43 +384,53 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
                       {totalVoteCount} {totalVoteCount === 1 ? "vote" : "votes"}
                     </span>
                     <div className="flex items-center gap-2" onClick={(e) => e.stopPropagation()}>
-                      {!ended && !userVoted && !isConnected && (
+                      {!ended && supportVote === undefined && !isConnected && (
                         <button onClick={onConnectRequest} className="text-xs font-medium px-3 py-1.5 rounded-lg transition-colors" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-dim)" }}>
                           Connect wallet to vote
                         </button>
                       )}
-                      {!ended && !userVoted && isConnected && isVerified === false && (
+                      {!ended && supportVote === undefined && isConnected && isVerified === false && (
                         <span className="text-xs font-medium px-3 py-1.5 rounded-lg" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-amber)" }}>
                           Verify to vote
                         </span>
                       )}
-                      {!ended && !userVoted && isConnected && isVerified === true && (
+                      {!ended && supportVote === undefined && isConnected && isVerified === true && (
                         <div className="flex gap-2">
                           <button
-                            disabled={waiting}
+                            disabled={isApproving}
                             onClick={() => handleVote(p.id, true)}
-                            className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all"
-                            style={{ backgroundColor: "rgba(52,211,153,0.15)", color: "#34d399" }}
-                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(52,211,153,0.25)"}
-                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "rgba(52,211,153,0.15)"}
+                            className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all min-w-[90px]"
+                            style={{
+                              backgroundColor: "rgba(52,211,153,0.15)",
+                              color: "#34d399",
+                              opacity: isApproving ? 0.6 : 1,
+                              cursor: isApproving ? "not-allowed" : "pointer",
+                            }}
+                            onMouseEnter={(e) => { if (!isApproving) e.currentTarget.style.backgroundColor = "rgba(52,211,153,0.25)" }}
+                            onMouseLeave={(e) => { if (!isApproving) e.currentTarget.style.backgroundColor = "rgba(52,211,153,0.15)" }}
                           >
-                            {waiting && voteStatus[p.id] === "pending" ? "..." : "Approve"}
+                            {isApproving ? <><Spinner />Approving...</> : "Approve"}
                           </button>
                           <button
-                            disabled={waiting}
+                            disabled={isRejecting}
                             onClick={() => handleVote(p.id, false)}
-                            className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all"
-                            style={{ backgroundColor: "rgba(239,68,68,0.15)", color: "#ef4444" }}
-                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(239,68,68,0.25)"}
-                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "rgba(239,68,68,0.15)"}
+                            className="text-xs font-semibold px-3 py-1.5 rounded-lg transition-all min-w-[90px]"
+                            style={{
+                              backgroundColor: "rgba(239,68,68,0.15)",
+                              color: "#ef4444",
+                              opacity: isRejecting ? 0.6 : 1,
+                              cursor: isRejecting ? "not-allowed" : "pointer",
+                            }}
+                            onMouseEnter={(e) => { if (!isRejecting) e.currentTarget.style.backgroundColor = "rgba(239,68,68,0.25)" }}
+                            onMouseLeave={(e) => { if (!isRejecting) e.currentTarget.style.backgroundColor = "rgba(239,68,68,0.15)" }}
                           >
-                            {waiting && voteStatus[p.id] === "pending" ? "..." : "Reject"}
+                            {isRejecting ? <><Spinner />Rejecting...</> : "Reject"}
                           </button>
                         </div>
                       )}
-                      {!ended && userVoted === true && (
+                      {!ended && supportVote !== undefined && (
                         <span className="text-xs font-medium px-3 py-1.5 rounded-lg" style={{ backgroundColor: "var(--bg-card-hover)", color: "var(--text-accent)" }}>
-                          You voted: Approve
+                          You voted: {supportVote ? "Approve" : "Reject"}
                         </span>
                       )}
                       {ended && (
@@ -417,7 +443,7 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
                           {p.implemented ? `Implemented ${fmtDate(p.implementedAt)}` : "Implementation: Pending"}
                         </span>
                       )}
-                      {waiting && voteStatus[p.id] === "success" && (
+                      {(isApproving || isRejecting) && voteStatus[p.id] === "success" && (
                         <span className="text-xs" style={{ color: "#34d399" }}>Voted ✓</span>
                       )}
                     </div>
@@ -529,34 +555,52 @@ export default function VoteSection({ isConnected, isVerified, onConnectRequest 
                   )}
                   {isConnected && isVerified === true && (
                     <>
-                      {votedMap[selectedProposal.id] === true ? (
-                        <div className="flex-1 py-3 rounded-lg text-sm text-center font-medium" style={{ backgroundColor: "var(--bg-accent-soft)", color: "var(--text-accent)" }}>
-                          You voted: Approve
-                        </div>
-                      ) : (
-                        <>
-                          <button
-                            disabled={isPending || voteStatus[selectedProposal.id] !== undefined}
-                            onClick={() => handleVote(selectedProposal.id, true)}
-                            className="flex-1 py-3 rounded-lg text-sm font-semibold transition-all"
-                            style={{ backgroundColor: "rgba(52,211,153,0.15)", color: "#34d399" }}
-                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(52,211,153,0.25)"}
-                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "rgba(52,211,153,0.15)"}
-                          >
-                            {voteStatus[selectedProposal.id] === "pending" ? "Voting..." : voteStatus[selectedProposal.id] === "success" ? "Voted ✓" : "Approve"}
-                          </button>
-                          <button
-                            disabled={isPending || voteStatus[selectedProposal.id] !== undefined}
-                            onClick={() => handleVote(selectedProposal.id, false)}
-                            className="flex-1 py-3 rounded-lg text-sm font-semibold transition-all"
-                            style={{ backgroundColor: "rgba(239,68,68,0.15)", color: "#ef4444" }}
-                            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = "rgba(239,68,68,0.25)"}
-                            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = "rgba(239,68,68,0.15)"}
-                          >
-                            {voteStatus[selectedProposal.id] === "success" ? "Voted ✓" : "Reject"}
-                          </button>
-                        </>
-                      )}
+                      {(() => {
+                        const modalVote = selectedProposal.id in localVotes ? localVotes[selectedProposal.id] : (votedMap[selectedProposal.id] || undefined)
+                        if (modalVote !== undefined) {
+                          return (
+                            <div className="flex-1 py-3 rounded-lg text-sm text-center font-medium" style={{ backgroundColor: "var(--bg-accent-soft)", color: "var(--text-accent)" }}>
+                              You voted: {modalVote ? "Approve" : "Reject"}
+                            </div>
+                          )
+                        }
+                        const modalApprove = pendingAction[selectedProposal.id] === "approve"
+                        const modalReject = pendingAction[selectedProposal.id] === "reject"
+                        return (
+                          <>
+                            <button
+                              disabled={modalApprove}
+                              onClick={() => handleVote(selectedProposal.id, true)}
+                              className="flex-1 py-3 rounded-lg text-sm font-semibold transition-all min-w-[120px]"
+                              style={{
+                                backgroundColor: "rgba(52,211,153,0.15)",
+                                color: "#34d399",
+                                opacity: modalApprove ? 0.6 : 1,
+                                cursor: modalApprove ? "not-allowed" : "pointer",
+                              }}
+                              onMouseEnter={(e) => { if (!modalApprove) e.currentTarget.style.backgroundColor = "rgba(52,211,153,0.25)" }}
+                              onMouseLeave={(e) => { if (!modalApprove) e.currentTarget.style.backgroundColor = "rgba(52,211,153,0.15)" }}
+                            >
+                              {modalApprove ? <><Spinner />Voting...</> : voteStatus[selectedProposal.id] === "success" ? "Voted ✓" : "Approve"}
+                            </button>
+                            <button
+                              disabled={modalReject}
+                              onClick={() => handleVote(selectedProposal.id, false)}
+                              className="flex-1 py-3 rounded-lg text-sm font-semibold transition-all min-w-[120px]"
+                              style={{
+                                backgroundColor: "rgba(239,68,68,0.15)",
+                                color: "#ef4444",
+                                opacity: modalReject ? 0.6 : 1,
+                                cursor: modalReject ? "not-allowed" : "pointer",
+                              }}
+                              onMouseEnter={(e) => { if (!modalReject) e.currentTarget.style.backgroundColor = "rgba(239,68,68,0.25)" }}
+                              onMouseLeave={(e) => { if (!modalReject) e.currentTarget.style.backgroundColor = "rgba(239,68,68,0.15)" }}
+                            >
+                              {modalReject ? <><Spinner />Voting...</> : voteStatus[selectedProposal.id] === "success" ? "Voted ✓" : "Reject"}
+                            </button>
+                          </>
+                        )
+                      })()}
                     </>
                   )}
                 </div>

@@ -18,7 +18,7 @@ function TokenRow({ token, address, onRefetch }) {
   const bal = (() => {
     if (raw === undefined || raw === null) return null
     const num = Number(raw) / 10 ** 18
-    return Number.isFinite(num) ? num.toLocaleString(undefined, { maximumFractionDigits: 2 }) : null
+    return Number.isFinite(num) ? num.toString() : null
   })()
 
   useEffect(() => {
@@ -61,6 +61,7 @@ export default function WalletPanel({ open, onClose }) {
   const { data: nativeBalance, isPending: nativePending, refetch: refetchNative } = useBalance({
     address,
     chainId: GIWA_CHAIN.id,
+    query: { enabled: !!address },
   })
 
   const { data: badgeCount } = useReadContract({
@@ -125,7 +126,7 @@ export default function WalletPanel({ open, onClose }) {
   function formatBalance(raw) {
     if (raw == null) return null
     const num = Number(raw)
-    return Number.isFinite(num) ? num.toLocaleString(undefined, { maximumFractionDigits: 4 }) : null
+    return Number.isFinite(num) ? num.toString() : null
   }
 
   const nativeFormatted = formatBalance(nativeBalance ? formatEther(nativeBalance.value) : null)

@@ -75,7 +75,7 @@ export default function FaucetSection({ isConnected, isVerified, onConnectReques
   const [claiming, setClaiming] = useState(false)
 
   const [addingTokens, setAddingTokens] = useState(false)
-  const { writeContract, isPending } = useWriteContract()
+  const { writeContractAsync, isPending } = useWriteContract()
 
   const token = FAUCET_TOKENS[selectedIdx]
 
@@ -86,7 +86,7 @@ export default function FaucetSection({ isConnected, isVerified, onConnectReques
     query: { enabled: !!CONTRACTS.faucet },
   })
 
-  const { data: rawCooldown } = useReadContract({
+  const { data: rawCooldown, refetch: refetchCooldown } = useReadContract({
     address: CONTRACTS.faucet,
     abi: GiwaFaucetAbi,
     functionName: "getCooldownRemaining",
@@ -139,7 +139,7 @@ export default function FaucetSection({ isConnected, isVerified, onConnectReques
   const divisor = 10 ** decimals
 
   function fmt(n) {
-    return (n / divisor).toLocaleString(undefined, { maximumFractionDigits: 0 })
+    return Math.round(n / divisor).toString()
   }
 
   async function addAllTokens() {
@@ -172,16 +172,26 @@ export default function FaucetSection({ isConnected, isVerified, onConnectReques
 
     try {
       flushSync(() => setClaiming(true))
-      await writeContract({
-        address: CONTRACTS.faucet,
-        abi: GiwaFaucetAbi,
-        functionName: "claim",
-        args: [token.address],
-        gas: 200000n,
-      })
+      try {
+        await writeContractAsync({
+          address: CONTRACTS.faucet,
+          abi: GiwaFaucetAbi,
+          functionName: "claim",
+          args: [token.address],
+          gas: 200000n,
+        })
+      } catch {
+        setCd(0)
+        refetchCooldown()
+        setClaiming(false)
+        return
+      }
       await new Promise((r) => setTimeout(r, 3000))
       setCd(86400)
-    } catch {}
+    } catch {
+      setCd(0)
+      refetchCooldown()
+    }
     setClaiming(false)
   }
 

@@ -145,15 +145,15 @@ export default function SwapSection({ isConnected, isVerified, onConnectRequest 
 
   function fmt(n) {
     if (n == null) return "-"
-    return n.toLocaleString(undefined, { maximumFractionDigits: 6 })
+    return n.toString()
   }
 
   function fmtCompact(big) {
     if (big == null) return "-"
     const n = Number(big) / Number(DIVISOR)
-    if (n >= 1000) return n.toLocaleString(undefined, { maximumFractionDigits: 0 })
-    if (n >= 1) return n.toLocaleString(undefined, { maximumFractionDigits: 2 })
-    return n.toLocaleString(undefined, { maximumFractionDigits: 4 })
+    if (n >= 1000) return Math.round(n).toString()
+    if (n >= 1) return n.toFixed(2)
+    return n.toFixed(4)
   }
 
   function formatRate() {
