@@ -123,7 +123,7 @@ function HowItWorksSection() {
     {
       num: "03",
       title: "Access dApps",
-      desc: "Once verified, you can claim test tokens from the faucet, swap tokens via the AMM, and vote on governance proposals.",
+      desc: "Once verified, you can claim test tokens from the faucet, swap tokens via the AMM, and vote on ecosystem decisions. Cast your first vote to earn the Governance Participant badge.",
     },
   ]
 
@@ -185,7 +185,7 @@ function FeaturesSection() {
     },
     {
       title: "Governance",
-      desc: "Create and vote on ecosystem proposals. One person, one vote stops manipulation at the source.",
+      desc: "Vote on ecosystem decisions like new tokens, faucet parameters, and platform changes. One verified wallet, one vote. Cast your first vote to earn the Governance Participant badge.",
       to: "/governance",
       accent: "var(--accent-vote)",
       bg: "var(--accent-vote-soft)",

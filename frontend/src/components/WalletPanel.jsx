@@ -1,8 +1,9 @@
 import { useEffect, useRef, useState, useCallback } from "react"
 import { useBalance, useReadContract, useAccount, useDisconnect } from "wagmi"
 import { formatEther } from "viem"
-import { FAUCET_TOKENS, GIWA_CHAIN } from "../config"
+import { FAUCET_TOKENS, CONTRACTS, GIWA_CHAIN } from "../config"
 import testTokenAbi from "../abis/TestToken.json"
+import GiwaGovernanceBadgeAbi from "../abis/GiwaGovernanceBadge.json"
 
 function TokenRow({ token, address, onRefetch }) {
   const { data: raw, isPending, refetch } = useReadContract({
@@ -59,6 +60,14 @@ export default function WalletPanel({ open, onClose }) {
   const { data: nativeBalance, isPending: nativePending, refetch: refetchNative } = useBalance({
     address,
     chainId: GIWA_CHAIN.id,
+  })
+
+  const { data: badgeCount } = useReadContract({
+    address: CONTRACTS.governanceBadge,
+    abi: GiwaGovernanceBadgeAbi,
+    functionName: "balanceOf",
+    args: [address],
+    query: { enabled: !!address && !!CONTRACTS.governanceBadge },
   })
 
   const registerRefetch = useCallback((fn) => {
@@ -241,6 +250,26 @@ export default function WalletPanel({ open, onClose }) {
               <TokenRow key={token.address} token={token} address={address} onRefetch={registerRefetch} />
             ))}
           </div>
+
+          {/* governance badge */}
+          {address && Number(badgeCount ?? 0) > 0 && (
+            <div className="flex items-center justify-between py-2.5 border-t" style={{ borderColor: "var(--border-card)" }}>
+              <div className="flex items-center gap-3">
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center text-xs"
+                  style={{ backgroundColor: "var(--bg-accent-soft)", color: "var(--text-accent)" }}
+                >
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" stroke="none">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                  </svg>
+                </div>
+                <div className="text-sm font-medium" style={{ color: "var(--text-secondary)" }}>Governance Participant</div>
+              </div>
+              <div className="text-xs font-medium px-2 py-0.5 rounded" style={{ backgroundColor: "var(--bg-accent-soft)", color: "var(--text-accent)" }}>
+                Badge
+              </div>
+            </div>
+          )}
 
           {/* empty state */}
           {!nativePending && nativeFormatted === "0" && (
