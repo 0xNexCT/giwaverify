@@ -1,12 +1,11 @@
 import { useState, useCallback } from "react"
 import { NavLink } from "react-router-dom"
-import { useAccount, useDisconnect } from "wagmi"
+import { useAccount } from "wagmi"
 import WalletModal from "./WalletModal"
 import WalletPanel from "./WalletPanel"
 
 export default function Header({ theme, onToggleTheme, onConnectRequest }) {
   const { address, isConnected } = useAccount()
-  const { disconnect } = useDisconnect()
   const [mobileOpen, setMobileOpen] = useState(false)
   const [panelOpen, setPanelOpen] = useState(false)
   const togglePanel = useCallback(() => setPanelOpen((v) => !v), [])
@@ -142,20 +141,6 @@ export default function Header({ theme, onToggleTheme, onConnectRequest }) {
                 <span className="text-base font-mono" style={{ color: "var(--text-muted)" }}>
                   {address.slice(0, 4)}...{address.slice(-3)}
                 </span>
-              </button>
-              <button
-                onClick={disconnect}
-                aria-label="Disconnect wallet"
-                title="Disconnect wallet"
-                className="flex items-center justify-center rounded-lg transition-all duration-150"
-                style={{ width: 36, height: 36, color: "var(--text-secondary)", backgroundColor: "transparent" }}
-                onMouseEnter={(e) => { e.currentTarget.style.backgroundColor = "var(--bg-card)"; e.currentTarget.style.color = "#ef4444" }}
-                onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = "transparent"; e.currentTarget.style.color = "var(--text-secondary)" }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18.36 6.64a9 9 0 1 1-12.73 0"/>
-                  <line x1="12" y1="2" x2="12" y2="12"/>
-                </svg>
               </button>
             </div>
           ) : (

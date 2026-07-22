@@ -128,26 +128,32 @@ export default function WalletPanel({ open, onClose }) {
         {/* address row */}
         <div className="flex items-center justify-between px-5 py-4">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-mono" style={{ color: "var(--text-secondary)" }}>
-              {address ? `${address.slice(0, 6)}...${address.slice(-4)}` : ""}
-            </span>
-            <button
-              onClick={handleCopy}
-              className="p-1 rounded transition-colors"
-              style={{ color: copied ? "var(--text-accent)" : "var(--text-dim)" }}
-              title={copied ? "Copied!" : "Copy address"}
-            >
-              {copied ? (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="20 6 9 17 4 12"/>
-                </svg>
-              ) : (
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
-                  <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
-                </svg>
-              )}
-            </button>
+            {address ? (
+              <>
+                <span className="text-sm font-mono" style={{ color: "var(--text-secondary)" }}>
+                  {`${address.slice(0, 6)}...${address.slice(-4)}`}
+                </span>
+                <button
+                  onClick={handleCopy}
+                  className="p-1 rounded transition-colors"
+                  style={{ color: copied ? "var(--text-accent)" : "var(--text-dim)" }}
+                  title={copied ? "Copied!" : "Copy address"}
+                >
+                  {copied ? (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                  ) : (
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+                      <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+                    </svg>
+                  )}
+                </button>
+              </>
+            ) : (
+              <span className="text-sm" style={{ color: "var(--text-dim)" }}>Not connected</span>
+            )}
           </div>
           <button
             onClick={disconnect}
@@ -166,6 +172,7 @@ export default function WalletPanel({ open, onClose }) {
         </div>
 
         {/* balances section */}
+        {address && (
         <div className="px-5">
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-medium uppercase tracking-wider" style={{ color: "var(--text-dim)" }}>Balances</span>
@@ -232,6 +239,7 @@ export default function WalletPanel({ open, onClose }) {
             </div>
           )}
         </div>
+        )}
 
         {/* bottom hint */}
         <div className="px-5 py-4 mt-auto border-t" style={{ borderColor: "var(--border-card)" }}>
@@ -239,7 +247,7 @@ export default function WalletPanel({ open, onClose }) {
             <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
             </svg>
-            <span>GIWA Sepolia — Testnet</span>
+            <span>GIWA Sepolia, Testnet</span>
           </div>
         </div>
       </div>
