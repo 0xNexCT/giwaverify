@@ -2,11 +2,23 @@
 
 Unofficial community prototype, submitted for GASOK 2026. Not affiliated with GIWA or Upbit.
 
-KYC-gated dApps on GIWA Chain. The site is public right now for testing. At launch, only wallets with a valid Dojang attestation will get access.
+## What is GiwaVerify?
 
-**Website:** https://giwaverify.vercel.app'
-**Chain:** GIWA Sepolia (ID: 91342)
-**RPC:** https://sepolia-rpc.giwa.io
+GiwaVerify is a KYC-gated dApp ecosystem built on GIWA Chain, a high-performance
+OP Stack L2 with 1-second block times and Flashblocks preconfirmation.
+
+Before using any dApp on the platform, users must pass identity verification
+through Dojang, GIWA's onchain attestation system powered by Upbit KYC. This
+ties every wallet to a verified real person, so the environment stays free of
+bots, fake accounts, and wash trading.
+
+Once verified, GiwaVerify unlocks three core modules:
+
+> **Public Test Notice:** This website is currently open for everyone to test. Once live, only wallets with valid Dojang attestations (KYC) will be able to use the dApps. So check it out while you can!
+
+**Website:** https://giwaverify.vercel.app <br>
+**Chain:** GIWA Sepolia (ID: 91342) <br>
+**RPC:** https://sepolia-rpc.giwa.io <br>
 **Explorer:** https://sepolia-explorer.giwa.io
 
 ---
