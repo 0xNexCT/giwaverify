@@ -43,26 +43,26 @@ Every transaction flow (faucet claim, swap, vote) checks the chain first. If you
 5 test tokens (GVA, GVB, GVC, GVD, GVE) at 18 decimals each. You can claim 100 of each token once every 24 hours, with a lifetime max of 500 per wallet. The claim button shows a countdown when you're on cooldown. After claiming, cooldown activates immediately, and balances update 1 second later. The contract has a `claimAll()` batch function but it's not exposed in the UI.
 
 Contracts:
-- GiwaFaucet: `0xD478F71086146539Aad272f74aa7E73ee1ba9A4B`
-- GVA: `0xaEb7B16e9Fd7DbB7C815f102E3Ec9d44d4358887`
-- GVB: `0x7c9D5163EABb67417107A0a0e3DF0397A1ad3D03`
-- GVC: `0xE9D91031B2c330fAF5D6f1cd11981B06DC208A6e`
-- GVD: `0x52d57B37F0E5C9fEce966BC47ed0Ca2E7Cf78673`
-- GVE: `0x58C5c8641450609275F38376F614cf328dB49df0`
+- GiwaFaucet: `0x4E33AEcEC539b6C412145a5178693B0c867caA19`
+- GVA: `0x9F03e390725216E38dBcb9106B4A6ec2611da7b2`
+- GVB: `0x1EE1c3516eB72B79f2d6BE419Bf4fFAd6088225e`
+- GVC: `0xdBFe78649585CF656D99f73A036093ca4DCF9ada`
+- GVD: `0x40405F98E2a646ebBFb5ab55806a0a118E04a286`
+- GVE: `0x48CaFE7eB73330E07B9dF0C61D4012aD0aD2c813`
 
 ### Swap
 AMM with a 0.3% fee. Pick a from/to token pair, enter an amount, and the estimated output shows up. If the swap contract needs approval, you get an Approve step first. You can tweak transaction speed (Slow/Medium/Fast) in the settings menu. Reserves for the selected pair are shown.
 
-Swap contract: `0x5095Bff088BcECf56476DcEAAE45c52351b6EF2B`
+Swap contract: `0x176a8A769A7c03e2140B7Fb47C6d664Af977B64C`
 
 Liquidity exists for GVA-GVB (200K each), GVA-GVC (100K each), and GVB-GVC (100K each).
 
 ### Governance / Voting
 Wallets can vote on proposals. Each vote mints 10 GVF tokens and, on your first vote ever, a soulbound Governance Participant badge. Voting lasts 30 days from creation. If yes votes beat no votes at the deadline, the owner can mark it as implemented.
 
-Governance contract: `0x21b79389c3820b975961212b7da16b732982edf1`
-Badge contract: `0xAe6612cAc8957fc069B24055Ae9b288bB350105d`
-GVF token: `0x3b3780B42716B40150859bfAEAab103a8ED0Ad76`
+Governance contract: `0xb981D048Db34dFDC3064377C9a95F5a3995f7616`
+Badge contract: `0xa070EF81Af0EA0B595E112aDe9bD3aFb92204674`
+GVF token: `0x48A227d0fcc84602c2af7a55918Fe473b51ab1FB`
 
 **Proposals:**
 | ID | Title | Status |
@@ -102,17 +102,17 @@ forge script script/DeployVoteV2.s.sol --rpc-url <RPC> --broadcast --private-key
 ## All Contracts
 
 | Contract | File | Deployed |
-|---|---|---|
-| GiwaFaucet | `src/GiwaFaucet.sol` | `0xD478F710...` |
-| GiwaSwap | `src/GiwaSwap.sol` | `0x5095Bff0...` |
-| GiwaVote | `src/GiwaVote.sol` | `0x21b79389...` |
-| GiwaGovernanceBadge | `src/GiwaGovernanceBadge.sol` | `0xAe6612cA...` |
-| GVF | `src/GVF.sol` | `0x3b3780B4...` |
+|---|---|---|---|
+| GiwaFaucet | `src/GiwaFaucet.sol` | `0x4E33AEcE...` |
+| GiwaSwap | `src/GiwaSwap.sol` | `0x176a8A76...` |
+| GiwaVote | `src/GiwaVote.sol` | `0xb981D048...` |
+| GiwaGovernanceBadge | `src/GiwaGovernanceBadge.sol` | `0xa070EF81...` |
+| GVF | `src/GVF.sol` | `0x48A227d0...` |
 | GiwaToken (x5) | `src/GiwaToken.sol` | Per token above |
 | DemoVerifier | `src/DemoVerifier.sol` | `0x7893e1Ac...` |
 | GiwaVerifyPass | `src/GiwaVerifyPass.sol` | `0x3e43CdF6...` |
-| GiwaP2P | `src/GiwaP2P.sol` | Not wired |
-| GiwaAirdrop | `src/GiwaAirdrop.sol` | Not wired |
+| GiwaP2P | `src/GiwaP2P.sol` | `0x071F8A30...` |
+| GiwaAirdrop | `src/GiwaAirdrop.sol` | `0x14dfd4B6...` |
 
 ---
 
